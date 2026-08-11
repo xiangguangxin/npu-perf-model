@@ -1,0 +1,26 @@
+# CMake / 构建产物
+/build/
+build/
+
+# 第三方依赖：源码(third_party/systemc-src/)入库，编译产物不入库。
+# 靠 scripts/setup_systemc.sh 从源码本地编译生成下面这些。
+# 注意：.gitignore 不支持行尾内联注释，pattern 必须独占一行。
+# 编译安装出来的 install prefix(含 .so、头文件、cmake)
+/third_party/systemc/
+# 编译临时目录
+/third_party/.build/
+*.so
+*.so.*
+
+# 编译中间文件
+*.o
+*.obj
+*.a
+*.so
+*.exe
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+*.swp
+.DS_Store
