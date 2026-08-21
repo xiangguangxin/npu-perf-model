@@ -11,12 +11,16 @@ WorkloadDriver::WorkloadDriver(sc_module_name n, NpuConfig c, GemmTask t,
 }
 
 // load 一块 tile：HBM -> 片上（HBM 延迟+带宽，再加写进 buffer 的带宽时间）
+// 数据流向为 HBM ───► DMA ───► Buffer。
+// 数据刚从片外搬进来，必须“写入” SRAM Buffer 暂存，供 PE 阵列后续读取计算
 void WorkloadDriver::load_tile(TileExtension::Kind kind, uint32_t bytes, uint32_t tid) {
     dma_->read(/*addr=*/0, bytes, kind, tid);   // HBM -> 片上
     wait(buf_->access_time(bytes));             // 写进 buffer 的带宽时间
 }
 
 // store 一块 output tile：片上 -> HBM（先从 buffer 读出，再经 DMA 写回）
+// PE 阵列计算完毕后，结果是存放在 Buffer 里的。
+// 要把它持久化写回片外 HBM，数据流向是 Buffer ───► DMA ───► HBM
 void WorkloadDriver::store_tile(uint32_t bytes, uint32_t tid) {
     wait(buf_->access_time(bytes));                        // 从 buffer 读出
     dma_->write(/*addr=*/0, bytes, TileExtension::OUTPUT, tid);

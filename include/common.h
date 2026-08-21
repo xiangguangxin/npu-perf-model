@@ -33,7 +33,7 @@ public:
     uint64_t buffer_bytes() const;
 
     // ---- 只读访问器 ----
-    uint32_t array_n()         const { return array_n_; }          // 脉动阵列边长 N (N×N PE)
+    uint32_t array_n()         const { return array_n_; }           // 脉动阵列边长 N (N×N PE)
     uint32_t buffer_kb()       const { return buffer_kb_; }         // 片上 buffer 容量 (KB)
     double   buf_bw_Bpc()      const { return buf_bw_Bpc_; }        // buffer 带宽 (Bytes/cycle)
     double   hbm_bw_GBps()     const { return hbm_bw_GBps_; }       // HBM 带宽 (GB/s)
@@ -59,7 +59,9 @@ private:
 };
 
 // ---- GEMM workload 描述 ---- General Matrix Multiply
+// GemmTask 用来定义矩阵的总计算量（Compute Demand）和总访存量（Memory Traffic）
 // 输入 workload 的形状：M/K/N 三个维度，构造时给定，命令行可逐个覆盖。
+// C[M × N] = A[M × K] × B[K × N]
 class GemmTask {
 public:
     GemmTask(uint32_t M = 0, uint32_t K = 0, uint32_t N = 0)
@@ -76,6 +78,13 @@ public:
 private:
     uint32_t M_, K_, N_;
 };
+
+// A 的列数必须等于 B 的行数
+// ---- 具体例子（M=2, K=3, N=2）----
+//      A (2×3)       B (3×2)        C (2×2)
+//    [ 1  2  3 ]    [ 7  8 ]      [ 31  19 ]
+//    [ 4  5  6 ]  × [ 9  1 ]  =   [ 85  55 ]
+//                   [ 2  3 ]
 
 // ---- 用扩展把"这是哪种数据/哪个 tile"挂在 payload 上 ----
 class TileExtension : public tlm_extension<TileExtension> {

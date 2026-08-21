@@ -12,8 +12,11 @@ double NpuConfig::peak_compute_flops() const {
     return 2.0 * double(array_n_) * double(array_n_) * CLK_FREQ_HZ;
 }
 
-double NpuConfig::hbm_bw_Bps() const { return hbm_bw_GBps_ * 1e9; }
+// 带宽转换函数 将“吉字节每秒”（GB/s）的带宽数据，换算为“字节每秒”（B/s）
+// 1 GB/s= 10^9 B/s
+double NpuConfig::hbm_bw_Bps() const { return hbm_bw_GBps_ * 1e9; } 
 
+// 缓存大小转换函数 1 KB = 1024 字节
 uint64_t NpuConfig::buffer_bytes() const { return uint64_t(buffer_kb_) * 1024ull; }
 
 // ---- TileExtension ----
