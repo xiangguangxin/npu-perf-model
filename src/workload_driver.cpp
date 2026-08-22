@@ -5,9 +5,15 @@
 WorkloadDriver::WorkloadDriver(sc_module_name n, NpuConfig c, GemmTask t,
                                DmaEngine* d, OnchipBuffer* b, PeArray* p)
   : sc_module(n), cfg_(c), task_(t), dma_(d), buf_(b), pe_(p) {
-    // 按调度模式注册对应的进程：双缓冲=loader+compute 两线程；串行=单线程。
-    if (cfg_.double_buffer()) { SC_THREAD(loader); SC_THREAD(compute); }
-    else                      { SC_THREAD(run_serial); }
+    // 按调度模式注册对应的进程：
+    // 1. 双缓冲 = loader+compute 两线程；
+    // 2. 串行=单线程。
+    if (cfg_.double_buffer()) {
+        SC_THREAD(loader);
+        SC_THREAD(compute);
+    } else  {
+        SC_THREAD(run_serial);
+    }
 }
 
 // load 一块 tile：HBM -> 片上（HBM 延迟+带宽，再加写进 buffer 的带宽时间）
@@ -55,18 +61,39 @@ void WorkloadDriver::run_serial() {
 
 // ================= 双缓冲调度：loader / compute 两线程 ping-pong =================
 // 生产者：按 (i,j,k) 顺序把每个 K-slice 载入一个空槽。
+// 负责预取数据，不管 PE 阵列在干嘛，只要 SRAM 有空槽，就把下一个 Tile 数据从 HBM 预取进来。
 void WorkloadDriver::loader() {
-    const uint32_t n = cfg_.array_n();
-    const uint32_t bytes = tile_bytes();
-    const uint32_t mt = ceil_div(task_.M(), n);
-    const uint32_t nt = ceil_div(task_.N(), n);
-    const uint32_t kt = ceil_div(task_.K(), n);
+    const uint32_t n = cfg_.array_n();   // 脉动阵列的物理边长N
+    const uint32_t bytes = tile_bytes(); // 获取单个Tile包含的数据字节数，告诉DMA每次搬运多少字节的数据
+    const uint32_t mt = ceil_div(task_.M(), n); // 计算M维度（矩阵A的行数/输出矩阵C的行数）被切成了多少个Tile块
+    const uint32_t nt = ceil_div(task_.N(), n); // 计算N维度（矩阵B的列数/输出矩阵C的列数）被切成了多少个Tile块
+    const uint32_t kt = ceil_div(task_.K(), n); // 计算K维度（矩阵A的列数/矩阵B的行数）被切成了多少个Tile块
+    // C[i][j] = k∑​A[i][k] × B[k][j]
+    // for (i=0; i<M; i++) {
+    //      for (j=0; j<N; j++) { 
+    //          for(k=0; k<K; k++) {
+    //             C[i][j] += A[i][k] * B[k][j];
+    //         }
+    //     }
+    // }
+    // 
+    // Tile级矩阵乘
+    // for (tile_i) {
+    //     for (tile_j) {
+    //         for (tile_k) {  
+    //              累加K方向的输入tile
+    //              C_tile += A_tile(tile_i,tile_k) * B_tile(tile_k,tile_j);
+    //         }
+    //     }
+    // }
 
     uint32_t tid = 0;
     for (uint32_t i = 0; i < mt; ++i)
     for (uint32_t j = 0; j < nt; ++j)
     for (uint32_t k = 0; k < kt; ++k) {
-        while (free_slots_ == 0) wait(ev_free_);     // 双缓冲满 → 等 compute 腾槽
+        while (free_slots_ == 0) {
+            wait(ev_free_);     // 双缓冲满 → 等 compute 腾槽
+        }
         --free_slots_;
         buf_->allocate(bytes);
         // 两个操作数同一时刻提交，AT DMA 可让固定 HBM 延迟重叠。
