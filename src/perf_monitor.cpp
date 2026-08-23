@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 
+namespace npu_perf {
+
 // 理想最小搬运字节（无复用惩罚）
 double PerfMonitor::bytes_min(const NpuConfig& c, const GemmTask& t) {
     return (double(t.M()) * t.K() + double(t.K()) * t.N() + double(t.M()) * t.N())
@@ -64,3 +66,5 @@ void PerfMonitor::report(const NpuConfig& cfg, const GemmTask& t,
               << bw_ach_GBps << "," << thru_flops / 1e9 << ","
               << util_pct << "," << ai << "\n";
 }
+
+}  // namespace npu_perf

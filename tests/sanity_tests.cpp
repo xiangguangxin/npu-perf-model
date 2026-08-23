@@ -25,6 +25,8 @@ static bool approx(double a, double b, double eps = 1e-9) {
 }
 
 int sc_main(int, char*[]) {
+    using namespace npu_perf;
+
     std::cout << "==== MVP-3 sanity tests ====\n";
 
     // --- 1) cycle <-> time 换算 ---
@@ -104,7 +106,7 @@ int sc_main(int, char*[]) {
         WorkloadDriver drvF("drvF", c_db, t3, &dF, &bF, &pF);    // 双缓冲
         dF.isock.bind(mF.tsock);
 
-        sc_start();
+        sc_core::sc_start();
 
         // 集 A：两个 read 同时提交；100ns latency 重叠，1ns 数据传输串行。
         // load=(101/102ns 响应 + 两次4ns SRAM) =109ns，PE48，store=4+101，合计262ns。

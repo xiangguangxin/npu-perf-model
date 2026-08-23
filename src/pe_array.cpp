@@ -1,6 +1,8 @@
 // PeArray 的实现：weight-stationary 脉动阵列的 cycle-approximate timing。
 #include "pe_array.h"
 
+namespace npu_perf {
+
 // 算一趟的时间 = fill + steady + drain = 3N cycle
 sc_time PeArray::pass_time() const {
     const uint64_t n = cfg_.array_n();
@@ -13,3 +15,5 @@ void PeArray::account_pass() {
     macs_   += n * n * n;
     passes_ += 1;
 }
+
+}  // namespace npu_perf

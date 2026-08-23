@@ -21,6 +21,8 @@
 
 #include "common.h"
 
+namespace npu_perf {
+
 class PeArray : public sc_module {
 public:
     PeArray(sc_module_name n, NpuConfig c) : sc_module(n), cfg_(c) {}
@@ -41,3 +43,5 @@ private:
     uint64_t passes_ = 0;
     uint64_t macs_   = 0;
 };
+
+}  // namespace npu_perf

@@ -1,6 +1,8 @@
 // common.h 的实现：cycle<->time 换算、NpuConfig 派生量、payload 扩展的克隆。
 #include "common.h"
 
+namespace npu_perf {
+
 // ---- cycle 数 -> sc_time ----
 sc_time cycles(uint64_t n) {
     return sc_time(double(n) / CLK_FREQ_HZ, SC_SEC);
@@ -25,3 +27,5 @@ tlm_extension_base* TileExtension::clone() const { return new TileExtension(*thi
 void TileExtension::copy_from(tlm_extension_base const& e) {
     *this = static_cast<const TileExtension&>(e);
 }
+
+}  // namespace npu_perf

@@ -1,6 +1,8 @@
 // DmaEngine 的实现：AT initiator，负责四相握手和在途请求额度。
 #include "dma_engine.h"
 
+namespace npu_perf {
+
 // 同步外观：AT 请求仍先被提交，随后该调用线程只等待“本请求”的完成事件。
 // 因此 API 适合串行调度；需要让多个请求共享 latency 时，应使用 issue_* + wait_for。
 void DmaEngine::read(uint64_t addr, uint32_t bytes, TileExtension::Kind kind,
@@ -127,3 +129,5 @@ void DmaEngine::complete(Transfer& transfer) {
     transfer.done_ev_.notify(SC_ZERO_TIME);
     slot_free_ev_.notify(SC_ZERO_TIME);
 }
+
+}  // namespace npu_perf

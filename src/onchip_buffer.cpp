@@ -1,6 +1,8 @@
 // OnchipBuffer 的实现：片上 SRAM 的容量约束(can_hold) + 带宽约束(access_time)。
 #include "onchip_buffer.h"
 
+namespace npu_perf {
+
 // ---- 容量约束 ----
 // 再塞 bytes 字节会不会超过 buffer 总容量？(uint64_t 相加防 32 位溢出)
 bool OnchipBuffer::can_hold(uint32_t bytes) const {
@@ -23,3 +25,5 @@ void OnchipBuffer::release(uint32_t bytes) {
 sc_time OnchipBuffer::access_time(uint32_t bytes) const {
     return cycles(uint64_t(std::ceil(double(bytes) / cfg_.buf_bw_Bpc())));
 }
+
+}  // namespace npu_perf

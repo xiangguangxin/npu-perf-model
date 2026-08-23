@@ -48,6 +48,8 @@
 #include "onchip_buffer.h"
 #include "pe_array.h"
 
+namespace npu_perf {
+
 class WorkloadDriver : public sc_module {
 public:
     SC_HAS_PROCESS(WorkloadDriver);
@@ -105,3 +107,5 @@ private:
     sc_event ev_free_;                   // compute → loader：腾出空槽
     sc_event ev_filled_;                 // loader → compute：填好满槽
 };
+
+}  // namespace npu_perf

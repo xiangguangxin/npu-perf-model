@@ -12,6 +12,8 @@
 using namespace sc_core;
 using namespace tlm;
 
+namespace npu_perf {
+
 // ---- 时钟与换算 ----
 constexpr double CLK_FREQ_HZ = 1.0e9;          // 1 GHz 单位每秒多少个周期 Hz = 1秒(每秒多少个周期)
 
@@ -103,3 +105,5 @@ private:
     Kind     kind_    = WEIGHT;
     uint32_t tile_id_ = 0;
 };
+
+}  // namespace npu_perf

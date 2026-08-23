@@ -10,6 +10,8 @@
 #include "pe_array.h"
 #include "workload_driver.h"
 
+namespace npu_perf {
+
 class PerfMonitor {
 public:
     // 理想最小搬运字节（无复用惩罚）
@@ -19,3 +21,5 @@ public:
                        const Memory& mem, const DmaEngine& dma,
                        const PeArray& pe, const WorkloadDriver& drv);
 };
+
+}  // namespace npu_perf

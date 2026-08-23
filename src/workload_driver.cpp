@@ -2,6 +2,8 @@
 // 设计框图与同步语义见 workload_driver.h 头部注释。
 #include "workload_driver.h"
 
+namespace npu_perf {
+
 WorkloadDriver::WorkloadDriver(sc_module_name n, NpuConfig c, GemmTask t,
                                DmaEngine* d, OnchipBuffer* b, PeArray* p)
   : sc_module(n), cfg_(c), task_(t), dma_(d), buf_(b), pe_(p) {
@@ -144,3 +146,5 @@ void WorkloadDriver::compute() {
     }
     run_time_ = sc_time_stamp() - t0;                // compute 最后结束，由它记时
 }
+
+}  // namespace npu_perf

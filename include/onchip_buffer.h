@@ -24,6 +24,8 @@
 
 #include "common.h"
 
+namespace npu_perf {
+
 class OnchipBuffer : public sc_module {
 public:
     OnchipBuffer(sc_module_name n, NpuConfig c) : sc_module(n), cfg_(c) {}
@@ -53,3 +55,5 @@ private:
     uint32_t used_bytes_ = 0;     // 当前已用字节
     uint32_t peak_bytes_ = 0;     // 占用峰值(高水位线)
 };
+
+}  // namespace npu_perf

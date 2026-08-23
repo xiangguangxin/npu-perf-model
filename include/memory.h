@@ -22,6 +22,8 @@
 #include "common.h"
 #include <tlm_utils/peq_with_cb_and_phase.h>
 
+namespace npu_perf {
+
 class Memory : public sc_module {
 public:
     tlm_utils::simple_target_socket<Memory> tsock;   // 对外可绑定，故留 public
@@ -52,3 +54,5 @@ private:
     // PEQ 到期后的 backward-path 发送点：END_REQ 或 BEGIN_RESP。
     void peq_cb(tlm_generic_payload& gp, const tlm_phase& phase);
 };
+
+}  // namespace npu_perf

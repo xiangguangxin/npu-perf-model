@@ -66,6 +66,8 @@ static uint32_t parse_positive(const char* prog, const char* name, const char* s
 }
 
 int sc_main(int argc, char* argv[]) {
+    using namespace npu_perf;
+
     const char* prog = argv[0];
 
     // ---- 先扫一遍：分出选项(flag) 与 位置参数 ----
@@ -119,7 +121,7 @@ int sc_main(int argc, char* argv[]) {
     // MVP-2：DMA 直连 Memory（Interconnect 是加分模块，后续再插）
     dma.isock.bind(mem.tsock);
 
-    sc_start();
+    sc_core::sc_start();
 
     PerfMonitor::report(cfg, task, mem, dma, pe, drv);
     return 0;

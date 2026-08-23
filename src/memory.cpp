@@ -2,6 +2,8 @@
 #include "memory.h"
 #include <algorithm>
 
+namespace npu_perf {
+
 Memory::Memory(sc_module_name n, NpuConfig c)
   : sc_module(n), tsock("tsock"), cfg_(c),
     peq_(this, &Memory::peq_cb) {
@@ -94,3 +96,5 @@ void Memory::peq_cb(tlm_generic_payload& gp, const tlm_phase& phase) {
         SC_REPORT_ERROR("Memory", "initiator did not complete BEGIN_RESP");
     }
 }
+
+}  // namespace npu_perf

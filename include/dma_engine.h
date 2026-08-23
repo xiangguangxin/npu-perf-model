@@ -27,6 +27,8 @@
 #include <memory>
 #include <unordered_map>
 
+namespace npu_perf {
+
 class DmaEngine : public sc_module {
 public:
     tlm_utils::simple_initiator_socket<DmaEngine> isock;   // 对外可绑定，故留 public
@@ -75,8 +77,7 @@ private:
                       TileExtension::Kind kind, uint32_t tile_id);
     // Memory 通过 backward path 回调此函数。END_REQ 只确认接收；BEGIN_RESP 负责回
     // END_RESP，并释放本 DMA 的 in-flight slot。
-    tlm_sync_enum nb_transport_bw(tlm_generic_payload& gp, tlm_phase& phase,
-                                  sc_time& delay);
+    tlm_sync_enum nb_transport_bw(tlm_generic_payload& gp, tlm_phase& phase, sc_time& delay);
     // 统一收尾路径，兼容异步 BEGIN_RESP 和少数 target 可能返回的立即完成情形。
     void complete(Transfer& transfer);
 
@@ -87,3 +88,5 @@ private:
     sc_event slot_free_ev_;                // complete() 后唤醒被额度限制的发起方
     std::unordered_map<tlm_generic_payload*, Transfer*> active_; // 回调关联表（非所有权）
 };
+
+}  // namespace npu_perf
