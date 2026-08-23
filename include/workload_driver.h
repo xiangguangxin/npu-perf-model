@@ -62,16 +62,17 @@ private:
     // [ 单缓冲区模式 (Serial) ]
     // 时间 ───>
     // DMA 搬运 Tile 0 ───► PE 阵列计算 Tile 0 ───► DMA 搬运 Tile 1 ───► PE 阵列计算 Tile 1
-    //                                 (此时 DMA 闲置)                             (此时 PE 闲置)
+    //                       (此时 DMA 闲置)                             (此时 PE 闲置)
 
     // [ 乒乓双缓冲模式 (Double Buffer) ]
     // 时间 ───>
     // Slot 0:  [ DMA 搬运 Tile 0 ] ───► [  PE 算 Tile 0  ] ───► [ DMA 搬运 Tile 2 ]
-    // Slot 1:                           [ DMA 搬运 Tile 1 ] ───► [  PE 算 Tile 1  ]
-    //                                 (搬运与计算同时进行)
+    // Slot 1:                          [ DMA 搬运 Tile 1 ] ───► [  PE 算 Tile 1  ]
+    //                                  (搬运与计算同时进行)
 
 
     static uint32_t ceil_div(uint32_t a, uint32_t b) { return (a + b - 1) / b; }
+    
     // 计算单个矩阵分块（Tile）包含的数据字节数（Byte）
     // 当前的切片（Tile）尺寸完全等同于物理脉动阵列的大小
     uint32_t tile_bytes() const {

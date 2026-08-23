@@ -77,6 +77,7 @@ void WorkloadDriver::loader() {
     //     }
     // }
     // 
+    // mt × nt 决定有多少个输出 C Tile，kt 决定每个 C Tile 要沿 K 方向累加多少次。
     // Tile级矩阵乘
     // for (tile_i) {
     //     for (tile_j) {
@@ -96,13 +97,18 @@ void WorkloadDriver::loader() {
         }
         --free_slots_;
         buf_->allocate(bytes);
-        // 两个操作数同一时刻提交，AT DMA 可让固定 HBM 延迟重叠。
+
+        // 非阻塞提交两个操作数的 DMA 请求：分别通过 TLM nb_transport_fw() 发出 BEGIN_REQ，
+        // 两个 transaction 可同时处于 outstanding 状态，从而允许 HBM 访问延迟重叠。
         auto weight = dma_->issue_read(bytes, TileExtension::WEIGHT, tid);
         auto activation = dma_->issue_read(bytes, TileExtension::ACTIVATION, tid);
+
+        // 顺序等待完成
         dma_->wait_for(weight);
         wait(buf_->access_time(bytes));
         dma_->wait_for(activation);
         wait(buf_->access_time(bytes));
+
         ++filled_slots_;
         ev_filled_.notify(SC_ZERO_TIME);             // 通知 compute：有满槽
         ++tid;
@@ -124,7 +130,9 @@ void WorkloadDriver::compute() {
             for (uint32_t k = 0; k < kt; ++k) {
                 while (filled_slots_ == 0) wait(ev_filled_);  // 等 loader 载好
                 --filled_slots_;
-                wait(pe_->pass_time());              // PE 算一趟
+
+                // 模拟 PE Array 完成一次 Tile GEMM 所需要的时间。
+                wait(pe_->pass_time());
                 pe_->account_pass();
                 buf_->release(bytes);                // 释放该 slot
                 ++free_slots_;

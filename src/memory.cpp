@@ -25,8 +25,7 @@ Memory::Memory(sc_module_name n, NpuConfig c)
 //                       │     BEGIN_RESP @ data_done ──▶ DMA 收到后回 END_RESP
 //                       │
 //                       └─ ④ 返回 TLM_ACCEPTED（走异步四相路径）
-tlm_sync_enum Memory::nb_transport_fw(tlm_generic_payload& gp, tlm_phase& phase,
-                                      sc_time& delay) {
+tlm_sync_enum Memory::nb_transport_fw(tlm_generic_payload& gp, tlm_phase& phase, sc_time& delay) {
     // END_RESP 是 initiator 对 BEGIN_RESP 的确认；到这里 target 不再保留 payload。
     if (phase == END_RESP) return TLM_COMPLETED;
     if (phase != BEGIN_REQ) {
@@ -38,15 +37,45 @@ tlm_sync_enum Memory::nb_transport_fw(tlm_generic_payload& gp, tlm_phase& phase,
     // 允许上游携带 annotation；本工程当前 DMA 传 0，但按 AT 语义仍需计算到达时刻。
     const sc_time arrival = sc_time_stamp() + delay;
     const sc_time ready_for_data = arrival + cycles(cfg_.hbm_lat_cyc());
+
     // 固定 latency 期间不占用数据通道；若前一笔传输尚未结束，新请求必须排队，
     // 从而让 bytes/bw 的资源约束全局生效，而不是每个请求各自“满带宽”。
+    //     Tile0:
+    //      ready_for_data = 100 ns
+    //      data_done      = 140 ns
+    //      next_data_free_ = 140 ns
+
+    //     Tile1:
+    //      ready_for_data = 120 ns
+ 
+    //      data_start = max(120 ns, 140 ns) = 140 ns
+    //     时间：
+    //       100ns                140ns                 180ns
+    //         │                    │                     │
+    //         ├────── Tile0 ───────┤                     │
+    //         │                    ├────── Tile1 ────────┤
+    //         │                    │                     │
+    //                           Tile0完成
+    //                           Tile1开始
+    //     Tile1 虽然 120ns 已经 ready，但 HBM 数据通道仍被 Tile0 占用，所以必须等到 next_data_free_=140ns。因此：
+    //       data_start = max(ready_for_data, next_data_free_)
+    //     表示：
+    //       “数据已经准备好” 和 “数据通道空闲”， 两个条件都满足后，才能真正开始传输。
+    //  ready_for_data 决定“我自己准备好了没有”，next_data_free_ 决定“公共数据通道有没有空”，两者都满足才能 data_start
     const sc_time data_start = std::max(ready_for_data, next_data_free_);
+
+    // 传输时间 = 数据量 / 带宽
     const sc_time data_done = data_start + sc_time(bytes / cfg_.hbm_bw_Bps(), SC_SEC);
     next_data_free_ = data_done;
 
     // 将两个后向 phase 异步投递到 PEQ，到点自动回调 peq_cb，避免在 fw 回调中重入。
-    peq_.notify(gp, END_REQ, delay);                     // 第 2 拍：请求到达即发，释放 DMA 窗口
+    // END_REQ：请求到达 Memory 后立即异步返回，表示 Memory 已接受该请求。
+    //   注意：END_REQ 不代表数据传输完成，outstanding_ 仍保持占用， 真正完成并释放 DMA outstanding slot 的时刻是 BEGIN_RESP → END_RESP → complete()。
+    peq_.notify(gp, END_REQ, delay);                          // 第 2 拍：请求到达即发，释放 DMA 窗口
+
+    // BEGIN_RESP：等 HBM latency + 带宽传输完成后异步返回，data_done 表示本次 Tile 数据传输完成时刻。
     peq_.notify(gp, BEGIN_RESP, data_done - sc_time_stamp()); // 第 3 拍：数据传完才发
+    
     serviced_reqs_  += 1;
     serviced_bytes_ += uint64_t(bytes);
     gp.set_response_status(TLM_OK_RESPONSE);
