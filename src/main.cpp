@@ -61,6 +61,27 @@ static uint32_t parse_positive(const char* prog, const char* name, const char* s
     return static_cast<uint32_t>(v);
 }
 
+// 解析非负整数(>=0)，并做严格校验；失败则打印错误 + 用法后退出。
+// （noc_latency/queue_depth 等允许 0 的参数用这个，而不是 parse_positive。）
+static uint32_t parse_non_negative(const char* prog, const char* name, const char* s) {
+    errno = 0;
+    char* end = nullptr;
+    long long v = std::strtoll(s, &end, 10);
+
+    if (end == s || *end != '\0') {
+        std::cerr << "错误: 参数 " << name << " = \"" << s << "\" 不是合法整数\n\n";
+        print_usage(prog);
+        std::exit(2);
+    }
+    if (errno != 0 || v < 0 || v > UINT32_MAX) {
+        std::cerr << "错误: 参数 " << name << " = \"" << s
+                  << "\" 必须是 0 .. " << UINT32_MAX << " 之间的非负整数\n\n";
+        print_usage(prog);
+        std::exit(2);
+    }
+    return static_cast<uint32_t>(v);
+}
+
 // 解析正 double（带宽用），失败退出。
 static double parse_positive_double(const char* prog, const char* name, const char* s) {
     errno = 0;
@@ -106,7 +127,7 @@ int sc_main(int argc, char* argv[]) {
         }
         else if (a == "--noc-latency") {
             if (i + 1 >= argc) { std::cerr << "错误: --noc-latency 需要一个值\n\n"; print_usage(prog); return 2; }
-            noc_latency = parse_positive(prog, "--noc-latency", argv[++i]);
+            noc_latency = parse_non_negative(prog, "--noc-latency", argv[++i]);
         }
         else if (a == "--queue-depth") {
             if (i + 1 >= argc) { std::cerr << "错误: --queue-depth 需要一个值\n\n"; print_usage(prog); return 2; }

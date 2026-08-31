@@ -4,6 +4,11 @@
 //   3) 双 DMA 竞争：多源汇聚到互连，全部请求被服务、两源都被授予；
 //   4) 队列溢出/背压：浅队列触发 queue_full 事件且不死锁；
 //   5) 仲裁公平性：round-robin 授予均衡，fifo/priority 也不饿死。
+//
+// 【结构约束（重要）】SystemC 只允许在 sc_start() 之前的 elaboration 阶段构造
+// sc_module；仿真启动后再构造模块会触发 E529 "insert module failed: simulation
+// running"。因此这里先一次性构建全部测试拓扑（各拓扑是独立模块树、事件互不
+// 干扰），再用一次 sc_start() 并发跑完，最后统一逐项断言。
 
 #include "common.h"
 #include "hbm.h"
@@ -117,22 +122,49 @@ int sc_main(int, char*[]) {
               "PE accounting");
     }
 
+    // ===================================================================
+    // 构建全部测试拓扑（必须在 sc_start() 之前完成 elaboration）。
+    // 各拓扑是独立的模块树，事件互不干扰，可在同一次仿真里并发运行；
+    // 每个拓扑的时序只由自身链路决定，与其它拓扑无关。
+    // ===================================================================
+
+    // --- 集 5：单 DMA 端到端时序（手算对照） ---
+    NpuConfig c_db;                              // 默认 double_buffer=on
+    NpuConfig c_ser; c_ser.set_double_buffer(false);
+    GemmTask t1{16, 16, 16};                     // kt=1：无可重叠
+    GemmTask t2{16, 32, 16};                     // kt=2：db 能藏掉一趟 compute
+    GemmTask t3{32, 32, 16};                     // mt=2,nt=1,kt=2 → 2 个 output tile
+
+    Topo A("A", c_db,  t1, 1);   // kt=1 双缓冲
+    Topo S("S", c_ser, t2, 1);   // kt=2 串行
+    Topo D("D", c_db,  t2, 1);   // kt=2 双缓冲
+    Topo E("E", c_ser, t3, 1);   // 2 tiles 串行
+    Topo F("F", c_db,  t3, 1);   // 2 tiles 双缓冲
+
+    // --- 集 6：双 DMA 竞争 ---
+    NpuConfig c_2dma; c_2dma.set_dma_count(2);   // 2 个 DMA，fifo
+    GemmTask t6{32, 32, 32};                     // mt=2,nt=2,kt=2 → 16 read + 4 write
+    Topo T("cont", c_2dma, t6, 2);
+
+    // --- 集 7：队列溢出/背压 ---
+    NpuConfig c_ovf; c_ovf.set_dma_count(2); c_ovf.set_queue_depth(1);   // 极浅队列
+    Topo O("ovf", c_ovf, t6, 2);
+
+    // --- 集 8：仲裁公平性 ---
+    NpuConfig crr; crr.set_dma_count(2); crr.set_arbiter_policy(ArbiterPolicy::ROUND_ROBIN);
+    GemmTask t8{64, 32, 32};                     // mt=4,nt=2,kt=2 → 32 read + 8 write
+    Topo R("rr", crr, t8, 2);
+
+    NpuConfig cf; cf.set_dma_count(2); cf.set_arbiter_policy(ArbiterPolicy::FIFO);
+    NpuConfig cp; cp.set_dma_count(2); cp.set_arbiter_policy(ArbiterPolicy::PRIORITY);
+    Topo Ff("fifo", cf, t8, 2);
+    Topo Pp("prio", cp, t8, 2);
+
+    // 一次 sc_start() 并发跑完所有拓扑（全部线程结束后无 pending 事件，自然返回）。
+    sc_core::sc_start();
+
     // --- 5) MVP-3 兼容：单 DMA 经 互连→MC→Hbm，端到端时序与手算吻合 ---
     {
-        NpuConfig c_db;                              // 默认 double_buffer=on
-        NpuConfig c_ser; c_ser.set_double_buffer(false);
-        GemmTask t1{16, 16, 16};                     // kt=1：无可重叠
-        GemmTask t2{16, 32, 16};                     // kt=2：db 能藏掉一趟 compute
-        GemmTask t3{32, 32, 16};                     // mt=2,nt=1,kt=2 → 2 个 output tile
-
-        Topo A("A", c_db,  t1, 1);   // kt=1 双缓冲
-        Topo S("S", c_ser, t2, 1);   // kt=2 串行
-        Topo D("D", c_db,  t2, 1);   // kt=2 双缓冲
-        Topo E("E", c_ser, t3, 1);   // 2 tiles 串行
-        Topo F("F", c_db,  t3, 1);   // 2 tiles 双缓冲
-
-        sc_core::sc_start();
-
         // 集 A：两个 read 同时提交；100ns latency 重叠，1ns 数据传输串行。
         // load=(101/102ns 响应 + 两次4ns SRAM)=109ns，PE48，store=4+101，合计262ns。
         check(A.mc.serviced_reqs() == 3 && A.mc.serviced_bytes() == 3 * 256,
@@ -160,12 +192,6 @@ int sc_main(int, char*[]) {
 
     // --- 6) 双 DMA 竞争：多源汇聚，全部服务、两源都被授予 ---
     {
-        NpuConfig c; c.set_dma_count(2);             // 2 个 DMA，fifo
-        GemmTask t{32, 32, 32};                      // mt=2,nt=2,kt=2 → 16 read + 4 write
-        Topo T("cont", c, t, 2);
-
-        sc_core::sc_start();
-
         const uint64_t expect = 16 + 4;              // 2*2*2*2 read + 2*2 write
         check(T.mc.serviced_reqs() == expect, "2 DMA: MC served all 20 requests");
         check(T.ic.requests() == expect, "2 DMA: interconnect saw all requests");
@@ -176,28 +202,16 @@ int sc_main(int, char*[]) {
 
     // --- 7) 队列溢出/背压：浅队列触发 queue-full 事件且不死锁 ---
     {
-        NpuConfig c; c.set_dma_count(2); c.set_queue_depth(1);   // 极浅队列
-        GemmTask t{32, 32, 32};
-        Topo T("ovf", c, t, 2);
-
-        sc_core::sc_start();
-
         const uint64_t expect = 16 + 4;
-        check(T.ic.queue_full_events() > 0, "shallow queue: overflow events recorded");
-        check(T.ic.total_stall_ns() >= 0.0, "shallow queue: stall tracked");
-        check(T.mc.serviced_reqs() == expect, "shallow queue: still served all requests");
-        check(T.drv->run_time() > SC_ZERO_TIME, "shallow queue: no deadlock");
+        check(O.ic.queue_full_events() > 0, "shallow queue: overflow events recorded");
+        check(O.ic.total_stall_ns() >= 0.0, "shallow queue: stall tracked");
+        check(O.mc.serviced_reqs() == expect, "shallow queue: still served all requests");
+        check(O.drv->run_time() > SC_ZERO_TIME, "shallow queue: no deadlock");
     }
 
     // --- 8) 仲裁公平性：round-robin 授予均衡，fifo/priority 也不饿死 ---
     {
         // 8a) round-robin：两源授予次数应接近均衡（差 ≤ 1）。
-        NpuConfig crr; crr.set_dma_count(2); crr.set_arbiter_policy(ArbiterPolicy::ROUND_ROBIN);
-        GemmTask t{64, 32, 32};                      // mt=4,nt=2,kt=2 → 32 read + 8 write
-        Topo R("rr", crr, t, 2);
-
-        sc_core::sc_start();
-
         const uint64_t expect_rr = 32 + 8;
         check(R.mc.serviced_reqs() == expect_rr, "RR: served all requests");
         const int64_t g0 = int64_t(R.ic.granted(0)), g1 = int64_t(R.ic.granted(1));
@@ -205,13 +219,6 @@ int sc_main(int, char*[]) {
         check(std::abs(g0 - g1) <= 1, "RR: grants balanced within 1");
 
         // 8b) fifo / priority：都能跑完，授予次数之和 = 总请求数（不饿死、不死锁）。
-        NpuConfig cf; cf.set_dma_count(2); cf.set_arbiter_policy(ArbiterPolicy::FIFO);
-        NpuConfig cp; cp.set_dma_count(2); cp.set_arbiter_policy(ArbiterPolicy::PRIORITY);
-        Topo Ff("fifo", cf, t, 2);
-        Topo Pp("prio", cp, t, 2);
-
-        sc_core::sc_start();
-
         check(Ff.mc.serviced_reqs() == expect_rr
               && Ff.ic.granted(0) + Ff.ic.granted(1) == expect_rr,
               "FIFO: all served, grants sum to total");
