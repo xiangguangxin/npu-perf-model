@@ -66,9 +66,10 @@ tlm_sync_enum Interconnect::nb_transport_bw(tlm_generic_payload& gp,
     const uint32_t src = r->source();
 
     if (phase == END_REQ) {
-        // MC 已接受：转发 END_REQ 给源 DMA（无实质动作，仅协议确认）。
-        tlm_phase p = END_REQ; sc_time z = SC_ZERO_TIME;
-        (*tsocks_[src])->nb_transport_bw(gp, p, z);
+        // 下游（MC/Hbm）的 END_REQ 在此"吞掉"：本互连在接收请求入队（或背压
+        // 解除 promote）时，已经向上游 DMA 发过自己的 END_REQ，请求通道早已
+        // 释放。四相协议里每笔事务只应收到一次 END_REQ，这里不再二次转发，
+        // 否则 DMA 会对同一笔事务收到两个 END_REQ（协议不一致）。
         return TLM_ACCEPTED;
     }
 
