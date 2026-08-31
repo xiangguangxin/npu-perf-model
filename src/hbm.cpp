@@ -42,7 +42,11 @@ void Hbm::peq_cb(tlm_generic_payload& gp, const tlm_phase& phase) {
     tlm_phase bw_phase = phase;
     sc_time   delay = SC_ZERO_TIME;
     const tlm_sync_enum status = tsock->nb_transport_bw(gp, bw_phase, delay);
-    if (phase == BEGIN_RESP && status != TLM_COMPLETED) {
+    // 四相协议中，initiator 收到 BEGIN_RESP 可以：
+    //   - 返回 TLM_COMPLETED（立即闭合，不再回 END_RESP），或
+    //   - 返回 TLM_ACCEPTED（稍后经前向路径回 END_RESP）。
+    // MemoryController 采用后者：返回 TLM_ACCEPTED 后转发 END_RESP 过来。
+    if (phase == BEGIN_RESP && status != TLM_COMPLETED && status != TLM_ACCEPTED) {
         SC_REPORT_ERROR("Hbm", "initiator did not complete BEGIN_RESP");
     }
 }
