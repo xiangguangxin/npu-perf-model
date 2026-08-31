@@ -8,11 +8,19 @@
 #include <tlm_utils/simple_target_socket.h>
 #include <cstdint>
 #include <cmath>
+#include <string>
 
 using namespace sc_core;
 using namespace tlm;
 
 namespace npu_perf {
+
+// ---- 仲裁策略（MVP-4）----
+// Arbiter 只是 C++ 类（无独立时序），由 Interconnect 持有并调用。
+enum class ArbiterPolicy { FIFO, ROUND_ROBIN, PRIORITY };
+
+// 从命令行字符串解析仲裁策略；成功返回 true 并写入 out。
+bool parse_arbiter(const std::string& s, ArbiterPolicy& out);
 
 // ---- 时钟与换算 ----
 constexpr double CLK_FREQ_HZ = 1.0e9;          // 1 GHz 单位每秒多少个周期 Hz = 1秒(每秒多少个周期)
@@ -29,8 +37,10 @@ public:
     // 锋值算力 = PE数量 * 每PE每周期MAC次数 * MAC 的FLOP数 *频率 = 2×N²×f
     // (N*N = PE数量；一个MAC(乘加)是 2 FLOP；周期与频率互为倒数，乘频率=每秒运算次数)
     double peak_compute_flops() const;
-    // HBM 带宽换算成 Bytes/s
+    // HBM 带宽换算成 Bytes/s（MVP-4 起该带宽由 MemoryController 执行）
     double hbm_bw_Bps() const;
+    // 互连带宽换算成 Bytes/s
+    double interconnect_bw_Bps() const;
     // buffer 总容量 (Bytes)
     uint64_t buffer_bytes() const;
 
@@ -43,11 +53,21 @@ public:
     uint32_t dma_outstanding() const { return dma_outstanding_; }   // DMA 最大未完成事务
     bool     double_buffer()   const { return double_buffer_; }     // 是否开启预取重叠
     uint32_t data_bytes()      const { return data_bytes_; }        // 每元素字节数 (int8 = 1)
+    uint32_t dma_count()       const { return dma_count_; }         // DMA 引擎数量（MVP-4 多请求源）
+    ArbiterPolicy arbiter_policy() const { return arbiter_policy_; }// 互连仲裁策略
+    uint32_t noc_latency()     const { return noc_latency_; }       // 互连/NoC 单跳延迟 (cycle)
+    uint32_t queue_depth()     const { return queue_depth_; }       // 互连请求队列深度（背压阈值）
+    double   interconnect_bw_GBps() const { return interconnect_bw_GBps_; } // 互连带宽 (GB/s)
 
     // ---- 命令行会覆盖的量才暴露 setter ----
     void set_array_n(uint32_t v)      { array_n_ = v; }
     void set_buffer_kb(uint32_t v)    { buffer_kb_ = v; }
     void set_double_buffer(bool v)    { double_buffer_ = v; }
+    void set_dma_count(uint32_t v)    { dma_count_ = v; }
+    void set_arbiter_policy(ArbiterPolicy p) { arbiter_policy_ = p; }
+    void set_noc_latency(uint32_t v)  { noc_latency_ = v; }
+    void set_queue_depth(uint32_t v)  { queue_depth_ = v; }
+    void set_interconnect_bw_GBps(double v) { interconnect_bw_GBps_ = v; }
 
 private:
     uint32_t array_n_        = 16;      // 脉动阵列边长 N (N×N PE)
@@ -58,6 +78,13 @@ private:
     uint32_t dma_outstanding_ = 4;      // DMA 最大未完成 AT 事务
     bool     double_buffer_  = true;    // 是否开启预取重叠（MVP-2 才用到）
     uint32_t data_bytes_     = 1;       // 每元素字节数 (int8 = 1)
+
+    // ---- MVP-4 新增：多请求源 + 互连 + 仲裁 ----
+    uint32_t dma_count_       = 1;      // DMA 引擎数量
+    ArbiterPolicy arbiter_policy_ = ArbiterPolicy::FIFO;  // 仲裁策略
+    uint32_t noc_latency_     = 0;      // 互连/NoC 单跳延迟 (cycle)
+    uint32_t queue_depth_     = 16;     // 互连请求队列深度（背压阈值）
+    double   interconnect_bw_GBps_ = 256;  // 互连带宽 (GB/s)；默认与 HBM 持平，单 DMA 不改变 MVP-3 时序
 };
 
 // ---- GEMM workload 描述 ---- General Matrix Multiply

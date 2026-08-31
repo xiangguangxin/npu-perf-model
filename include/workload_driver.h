@@ -47,14 +47,16 @@
 #include "dma_engine.h"
 #include "onchip_buffer.h"
 #include "pe_array.h"
+#include <vector>
 
 namespace npu_perf {
 
 class WorkloadDriver : public sc_module {
 public:
     SC_HAS_PROCESS(WorkloadDriver);
+    // MVP-4：dmas 可含多个 DMA，搬运算请求按 round-robin 分发到各 DMA，制造多源竞争。
     WorkloadDriver(sc_module_name n, NpuConfig c, GemmTask t,
-                   DmaEngine* d, OnchipBuffer* b, PeArray* p);
+                   std::vector<DmaEngine*> dmas, OnchipBuffer* b, PeArray* p);
 
     // 数据流+计算总耗时（供 PerfMonitor 读取）
     sc_time run_time() const { return run_time_; }
@@ -96,10 +98,14 @@ private:
 
     NpuConfig     cfg_;
     GemmTask      task_;
-    DmaEngine*    dma_;
+    std::vector<DmaEngine*> dmas_;   // N 个 DMA，round-robin 分发
     OnchipBuffer* buf_;
     PeArray*      pe_;
     sc_time       run_time_ = SC_ZERO_TIME;
+
+    uint32_t rr_ = 0;                 // round-robin 游标
+    // 取下一个 DMA（round-robin），把请求均匀洒到 N 条通道上。
+    DmaEngine* next_dma() { return dmas_[rr_++ % dmas_.size()]; }
 
     // 双缓冲同步状态
     int      free_slots_   = DB_SLOTS;   // 空槽数

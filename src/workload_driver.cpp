@@ -5,8 +5,8 @@
 namespace npu_perf {
 
 WorkloadDriver::WorkloadDriver(sc_module_name n, NpuConfig c, GemmTask t,
-                               DmaEngine* d, OnchipBuffer* b, PeArray* p)
-  : sc_module(n), cfg_(c), task_(t), dma_(d), buf_(b), pe_(p) {
+                               std::vector<DmaEngine*> dmas, OnchipBuffer* b, PeArray* p)
+  : sc_module(n), cfg_(c), task_(t), dmas_(std::move(dmas)), buf_(b), pe_(p) {
     // 按调度模式注册对应的进程：
     // 1. 双缓冲 = loader+compute 两线程；
     // 2. 串行=单线程。
@@ -22,8 +22,8 @@ WorkloadDriver::WorkloadDriver(sc_module_name n, NpuConfig c, GemmTask t,
 // 数据流向为 HBM ───► DMA ───► Buffer。
 // 数据刚从片外搬进来，必须“写入” SRAM Buffer 暂存，供 PE 阵列后续读取计算
 void WorkloadDriver::load_tile(TileExtension::Kind kind, uint32_t bytes, uint32_t tid) {
-    dma_->read(/*addr=*/0, bytes, kind, tid);   // HBM -> 片上
-    wait(buf_->access_time(bytes));             // 写进 buffer 的带宽时间
+    next_dma()->read(/*addr=*/0, bytes, kind, tid);   // HBM -> 片上
+    wait(buf_->access_time(bytes));                   // 写进 buffer 的带宽时间
 }
 
 // store 一块 output tile：片上 -> HBM（先从 buffer 读出，再经 DMA 写回）
@@ -31,7 +31,7 @@ void WorkloadDriver::load_tile(TileExtension::Kind kind, uint32_t bytes, uint32_
 // 要把它持久化写回片外 HBM，数据流向是 Buffer ───► DMA ───► HBM
 void WorkloadDriver::store_tile(uint32_t bytes, uint32_t tid) {
     wait(buf_->access_time(bytes));                        // 从 buffer 读出
-    dma_->write(/*addr=*/0, bytes, TileExtension::OUTPUT, tid);
+    next_dma()->write(/*addr=*/0, bytes, TileExtension::OUTPUT, tid);
 }
 
 // ================= 串行调度：搬和算完全不重叠（对照下界）=================
@@ -102,13 +102,16 @@ void WorkloadDriver::loader() {
 
         // 非阻塞提交两个操作数的 DMA 请求：分别通过 TLM nb_transport_fw() 发出 BEGIN_REQ，
         // 两个 transaction 可同时处于 outstanding 状态，从而允许 HBM 访问延迟重叠。
-        auto weight = dma_->issue_read(bytes, TileExtension::WEIGHT, tid);
-        auto activation = dma_->issue_read(bytes, TileExtension::ACTIVATION, tid);
+        // MVP-4：round-robin 取两条（可能不同的）DMA 通道，制造多源竞争。
+        DmaEngine* wdma = next_dma();
+        DmaEngine* adma = next_dma();
+        auto weight = wdma->issue_read(bytes, TileExtension::WEIGHT, tid);
+        auto activation = adma->issue_read(bytes, TileExtension::ACTIVATION, tid);
 
         // 顺序等待完成
-        dma_->wait_for(weight);
+        wdma->wait_for(weight);
         wait(buf_->access_time(bytes));
-        dma_->wait_for(activation);
+        adma->wait_for(activation);
         wait(buf_->access_time(bytes));
 
         ++filled_slots_;

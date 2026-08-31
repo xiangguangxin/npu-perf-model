@@ -31,7 +31,11 @@ endif()
 add_library(npu_core STATIC
     src/common.cpp
     src/dma_engine.cpp
-    src/memory.cpp
+    src/hbm.cpp
+    src/memory_controller.cpp
+    src/interconnect.cpp
+    src/arbiter.cpp
+    src/npu_system.cpp
     src/onchip_buffer.cpp
     src/pe_array.cpp
     src/perf_monitor.cpp

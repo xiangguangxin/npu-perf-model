@@ -16,7 +16,9 @@ double NpuConfig::peak_compute_flops() const {
 
 // 带宽转换函数 将“吉字节每秒”（GB/s）的带宽数据，换算为“字节每秒”（B/s）
 // 1 GB/s= 10^9 B/s
-double NpuConfig::hbm_bw_Bps() const { return hbm_bw_GBps_ * 1e9; } 
+double NpuConfig::hbm_bw_Bps() const { return hbm_bw_GBps_ * 1e9; }
+
+double NpuConfig::interconnect_bw_Bps() const { return interconnect_bw_GBps_ * 1e9; }
 
 // 缓存大小转换函数 1 KB = 1024 字节
 uint64_t NpuConfig::buffer_bytes() const { return uint64_t(buffer_kb_) * 1024ull; }
@@ -26,6 +28,18 @@ tlm_extension_base* TileExtension::clone() const { return new TileExtension(*thi
 
 void TileExtension::copy_from(tlm_extension_base const& e) {
     *this = static_cast<const TileExtension&>(e);
+}
+
+// ---- 仲裁策略解析（命令行 --arbiter）----
+bool parse_arbiter(const std::string& s, ArbiterPolicy& out) {
+    if (s == "fifo" || s == "FIFO")        { out = ArbiterPolicy::FIFO;        return true; }
+    if (s == "rr" || s == "roundrobin" || s == "round-robin" || s == "ROUND_ROBIN") {
+        out = ArbiterPolicy::ROUND_ROBIN;  return true;
+    }
+    if (s == "priority" || s == "prio" || s == "PRIORITY") {
+        out = ArbiterPolicy::PRIORITY;     return true;
+    }
+    return false;
 }
 
 }  // namespace npu_perf
