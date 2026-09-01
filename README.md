@@ -32,39 +32,117 @@ ctest --test-dir build --output-on-failure
 
 cycle-approximate（近似周期级）：不做 cycle-accurate RTL，也不做纯解析。计算单元只建 timing，不做真实 MAC。
 
-## 目录结构
+## 项目架构
 
+```mermaid
+flowchart TB
+    ENTRY["main.cpp<br/>命令行参数 · NpuConfig · GemmTask"]
+
+    subgraph SYSTEM["NpuSystem · SystemC 顶层"]
+        direction TB
+
+        subgraph ONCHIP["调度与片上计算 · timing abstraction"]
+            direction LR
+            DRIVER["WorkloadDriver<br/>GEMM tiling<br/>串行 / 双缓冲"]
+            BUFFER["OnchipBuffer<br/>容量 · 访问带宽"]
+            PE["PeArray<br/>fill · steady · drain"]
+
+            DRIVER -. "容量与访问时延" .-> BUFFER
+            DRIVER -. "计算时延" .-> PE
+        end
+
+        subgraph MEMORY["访存子系统 · TLM-2.0 AT"]
+            direction LR
+            DMA["DmaEngine × N<br/>outstanding 窗口"]
+            IC["Interconnect<br/>队列 · 仲裁 · 背压<br/>NoC 延迟 · 转发带宽"]
+            MC["MemoryController<br/>HBM 带宽串行化"]
+            HBM["Hbm<br/>固定延迟 · PEQ"]
+
+            DMA ==>|"N 路 tagged socket<br/>四相 AT"| IC
+            IC ==>|"四相 AT"| MC
+            MC ==>|"四相 AT"| HBM
+        end
+
+        DRIVER -. "read()/write()<br/>round-robin" .-> DMA
+    end
+
+    REPORT["PerfMonitor<br/>吞吐 · 延迟 · 利用率 · CSV"]
+
+    ENTRY -->|"实例化 NpuSystem<br/>启动 sc_start()"| DRIVER
+    ENTRY -->|"仿真结束后<br/>读取各模块统计"| REPORT
+
+    classDef entry fill:#172554,color:#eff6ff,stroke:#3b82f6,stroke-width:2px
+    classDef control fill:#eef2ff,color:#312e81,stroke:#6366f1,stroke-width:2px
+    classDef compute fill:#ecfdf5,color:#064e3b,stroke:#10b981,stroke-width:2px
+    classDef memory fill:#fff7ed,color:#7c2d12,stroke:#f97316,stroke-width:2px
+    classDef report fill:#fdf2f8,color:#831843,stroke:#ec4899,stroke-width:2px
+
+    class ENTRY entry
+    class DRIVER control
+    class BUFFER,PE compute
+    class DMA,IC,MC,HBM memory
+    class REPORT report
+
+    style SYSTEM fill:#f8fafc,stroke:#64748b,stroke-width:2px
+    style ONCHIP fill:#f8fafc,stroke:#a5b4fc,stroke-dasharray:5 5
+    style MEMORY fill:#fffaf5,stroke:#fdba74,stroke-dasharray:5 5
 ```
-npu-perf-model/
-├── CMakeLists.txt
-├── README.md
-├── docs/
-│   └── design/
-│       ├── NPU_Perf_Model_DevDoc.md   // 开发文档：背景知识、模块设计、公式推导、博客大纲
-│       ├── MVP1_dataflow.md           // MVP-1 数据流程图
-│       ├── MVP3_at_dataflow.md        // MVP-3 四相 AT 数据流
-│       ├── MVP4-Class-Diagram-SystemC-Connection.md // MVP-4 类图与 socket 连接
-│       └── MVP4-Detailed-Design-Specification.md    // MVP-4 详细设计规范
-├── include/
-│   ├── common.h           // 全局类型、NpuConfig、cycle<->time 换算、TileExtension
-│   ├── request.h          // MemoryRequest：请求状态机 + issue/grant/finish 时间戳
-│   ├── arbiter.h          // 仲裁策略（FIFO / Round-Robin / Priority）
-│   ├── pe_array.h
-│   ├── onchip_buffer.h
-│   ├── dma_engine.h       // AT initiator（四相握手 + outstanding 窗口）
-│   ├── interconnect.h     // 队列 + 仲裁 + 背压 + 转发带宽串行化
-│   ├── memory_controller.h // HBM 数据通道带宽串行化 bridge
-│   ├── hbm.h              // HBM 固定延迟 target
-│   ├── npu_system.h       // 顶层组装与 socket 绑定
-│   ├── workload_driver.h
-│   └── perf_monitor.h
-├── src/
-│   └── (对应 .cpp，或 header-only)
-├── tests/
-│   └── sanity_tests.cpp
-└── scripts/
-    └── plot_results.py   // 读 CSV 出 roofline / 敏感性曲线
+
+图中粗实线表示 TLM-2.0 AT 四相 socket 链路（请求前向传递，响应沿 backward path 返回），虚线表示普通 C++ 函数调用。蓝紫色为调度模块，绿色为片上计算/存储，橙色为 AT 访存链路。
+
+## 数据流
+
+```mermaid
+flowchart TB
+    subgraph LOAD["① Load · 权重/激活进入片上"]
+        direction LR
+        L_HBM["HBM<br/>数据就绪"]
+        L_MC["MemoryController<br/>数据通道"]
+        L_IC["Interconnect<br/>响应路由"]
+        L_DMA["DmaEngine × N<br/>read"]
+        L_BUF["OnchipBuffer<br/>Weight / Activation tile"]
+
+        L_HBM --> L_MC --> L_IC --> L_DMA --> L_BUF
+    end
+
+    subgraph COMPUTE["② Compute · weight-stationary 计算"]
+        direction LR
+        C_INPUT["W/A tile"]
+        C_PE["PeArray<br/>fill → steady → drain"]
+        C_OUTPUT["Output tile<br/>K 维累加"]
+
+        C_INPUT --> C_PE --> C_OUTPUT
+    end
+
+    subgraph STORE["③ Store · 输出写回片外"]
+        direction LR
+        S_BUF["OnchipBuffer<br/>Output tile"]
+        S_DMA["DmaEngine × N<br/>write"]
+        S_IC["Interconnect<br/>请求路由"]
+        S_MC["MemoryController<br/>数据通道"]
+        S_HBM["HBM<br/>结果持久化"]
+
+        S_BUF --> S_DMA --> S_IC --> S_MC --> S_HBM
+    end
+
+    L_BUF -->|"tile ready"| C_INPUT
+    C_OUTPUT -->|"K 维累加完成"| S_BUF
+    L_BUF -. "双缓冲：预取 tile k+1<br/>与计算 tile k 重叠" .-> C_PE
+
+    classDef load fill:#eff6ff,color:#1e3a8a,stroke:#3b82f6,stroke-width:2px
+    classDef compute fill:#ecfdf5,color:#064e3b,stroke:#10b981,stroke-width:2px
+    classDef store fill:#fff7ed,color:#7c2d12,stroke:#f97316,stroke-width:2px
+
+    class L_HBM,L_MC,L_IC,L_DMA,L_BUF load
+    class C_INPUT,C_PE,C_OUTPUT compute
+    class S_BUF,S_DMA,S_IC,S_MC,S_HBM store
+
+    style LOAD fill:#f8fbff,stroke:#93c5fd,stroke-dasharray:5 5
+    style COMPUTE fill:#f6fffb,stroke:#6ee7b7,stroke-dasharray:5 5
+    style STORE fill:#fffaf5,stroke:#fdba74,stroke-dasharray:5 5
 ```
+
+该图表示逻辑数据方向：Load 的 TLM 请求从 DMA 发往 HBM，数据就绪后沿响应路径返回 DMA；Store 则从片上 Buffer 经 DMA 写回 HBM。双缓冲模式下，tile `k+1` 的 Load 可与 tile `k` 的 Compute 在仿真时间中重叠。本项目是 timing-only 模型，图中“数据流”表示时序与流量记账，不搬运真实矩阵数据。
 
 ## 核心模块
 
@@ -98,41 +176,6 @@ npu-perf-model/
 （带宽串行化）→ HBM（固定延迟）。新增命令行参数
 `--dma N --arbiter fifo|rr|priority --noc-latency N --queue-depth N --interconnect-bw G`；
 有效带宽 = min(interconnect_bw, hbm_bw)；队列满时背压（暂不回 END_REQ，腾槽后 promote）。
-
-### MVP-4 代码导读（从哪里开始看）
-
-推荐按"一条访存请求的旅程"顺序读：
-
-1. **先跑起来建立直觉**
-   ```bash
-   ./build/npu_sim --dma 4 --arbiter rr --noc-latency 2   # 看 grants/source 与 contention
-   ./build/sanity_tests                                    # 42 项断言，每项对应一个设计点
-   ```
-2. **读两份设计文档建立全局图（约 10 分钟）**
-   - `docs/design/MVP4-Detailed-Design-Specification.md`：§5 互连 / §6 仲裁 / §7 MC / §8 时序公式 / §9 背压
-   - `docs/design/MVP4-Class-Diagram-SystemC-Connection.md`：模块类图与 socket 连接关系
-3. **按数据流顺序读代码**
-
-   | 顺序 | 文件 | 看什么 |
-   |---|---|---|
-   | 1 | `src/main.cpp` | 入口：参数解析 → NpuSystem → 报告 |
-   | 2 | `include/npu_system.h` | 拓扑组装：N 个 DMA → IC → MC → HBM 的 socket 绑定 |
-   | 3 | `include/common.h` | NpuConfig 全部可调参数、TileExtension、cycle 换算 |
-   | 4 | `include/request.h` | MemoryRequest 状态机与 issue/grant/finish 三时间戳 |
-   | 5 | `include/arbiter.h` | 三种仲裁策略（纯 C++ 类，无独立时序） |
-   | 6 | `src/interconnect.cpp` | ★核心：forward_loop 仲裁+带宽串行化、背压 promote |
-   | 7 | `src/memory_controller.cpp` | 数据通道带宽串行化（next_data_free_ + PEQ） |
-   | 8 | `src/hbm.cpp` | 固定延迟 target：PEQ 调度 END_REQ/BEGIN_RESP |
-   | 9 | `src/dma_engine.cpp` | AT initiator：outstanding 窗口、Transfer 生命周期 |
-   | 10 | `src/workload_driver.cpp` | 调度层：串行 vs 双缓冲（loader/compute 生产者-消费者） |
-   | 11 | `src/perf_monitor.cpp` | 指标汇总与 CSV 输出 |
-
-4. **一条 read 请求的完整四相时序（贯穿主线）**
-   ```
-   DMA BEGIN_REQ → IC 入队并回 END_REQ → forward_loop 仲裁+等互连带宽
-     → 转发(noc_latency) → MC 转发 → Hbm PEQ: END_REQ@arrival / BEGIN_RESP@ready
-     → MC 串行带宽至 data_done → IC 记账并回 BEGIN_RESP → DMA 回 END_RESP 逐级闭合
-   ```
 
 ## 实验
 
