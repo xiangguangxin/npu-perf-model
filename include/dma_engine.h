@@ -11,16 +11,17 @@
 //   ├─ Transfer：一次事务独占的 gp + TileExtension + done_ev，必须活到 END_RESP
 //   ├─ active_：用 gp 地址找到等待响应的 Transfer
 //   ├─ outstanding_：在途计数；达到 cfg.dma_outstanding() 时暂停发起方
-//   └─ isock ── nb_transport_fw / nb_transport_bw ──> Memory::tsock
+//   └─ isock ── nb_transport_fw / nb_transport_bw ──> Interconnect::dma_socket(i)
 //
 // 【四相协议（时间从左到右）】
-//   DMA  -- BEGIN_REQ -->  Memory    请求已提交，payload 仍归 DMA 所有
-//   DMA  <-- END_REQ ---   Memory    target 接收完成，可继续发下一个请求
-//   DMA  <-- BEGIN_RESP -- Memory    HBM 延迟和带宽时间已过去，结果可消费
-//   DMA  -- END_RESP -->   Memory    事务收尾；DMA 才释放 Transfer/outstanding 槽
+//   DMA  -- BEGIN_REQ -->  Interconnect  请求已提交，payload 仍归 DMA 所有
+//   DMA  <-- END_REQ ---   Interconnect  互连已接收/入队，可继续发下一个请求
+//   DMA  <-- BEGIN_RESP -- Interconnect  下游 HBM 响应经由互连返回，结果可消费
+//   DMA  -- END_RESP -->   Interconnect  事务收尾，并由互连继续转发到下游
 //
 // 本模型允许最多 dma_outstanding 个请求同时处于上述四相流程中，用并发请求
-// 隐藏 HBM 固定延迟；Memory 侧仍会将数据传输阶段串行化，故不会虚增带宽。
+// 隐藏 HBM 固定延迟；Interconnect、MemoryController 与 HBM 分别建模
+// 排队、转发和数据通道时序，故不会虚增带宽。
 // ============================================================================
 
 #include "common.h"
@@ -75,8 +76,8 @@ private:
     // 公共 read/write 与 issue_* 最终都会进入此处；这里是 BEGIN_REQ 发出的唯一位置。
     TransferPtr submitTransfer(tlm_command cmd, uint64_t addr, uint32_t bytes,
                       TileExtension::Kind kind, uint32_t tile_id);
-    // Memory 通过 backward path 回调此函数。END_REQ 只确认接收；BEGIN_RESP 负责回
-    // END_RESP，并释放本 DMA 的 in-flight slot。
+    // Interconnect 通过 backward path 回调此函数。END_REQ 只确认接收；
+    // BEGIN_RESP 负责回 END_RESP，并释放本 DMA 的 in-flight slot。
     tlm_sync_enum nb_transport_bw(tlm_generic_payload& gp, tlm_phase& phase, sc_time& delay);
     // 统一收尾路径，兼容异步 BEGIN_RESP 和少数 target 可能返回的立即完成情形。
     void complete(Transfer& transfer);

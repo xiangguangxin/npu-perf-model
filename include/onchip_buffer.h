@@ -3,11 +3,12 @@
 // OnchipBuffer —— 片上 SRAM（又快又近、但容量很小的暂存区）的 timing 模型。
 //
 // 【在数据流里的位置】
-//     HBM(Memory) ──DMA 搬运──> [OnchipBuffer] ──喂──> PE Array(MVP-2 才接)
-//                  第①段路          第②段路
+//     HBM ──经 MC/Interconnect/DMA 搬运──> [OnchipBuffer] ──喂──> PE Array
+//                  第①段路                         第②段路
 //   数据被 DMA 从慢速 HBM 搬到片上后，先落在这里暂存，再喂给计算单元。
 //   本模块建模的是 "第②段"：数据到了片上之后，写进 SRAM 这块存储本身的开销，
-//   而不是 "从 HBM 搬过来"那段（那段由 Memory 的 hbm_lat + hbm_bw 建模）。
+//   而不是 "从 HBM 搬过来"那段（HBM 固定延迟由 Hbm 建模，
+//   HBM 数据通道带宽由 MemoryController 串行化，互连时序由 Interconnect 建模）。
 //
 // 【建模两道约束，缺一不可 —— 这是性能模型的精髓】
 //   1) 容量约束(can_hold)  : 片上就这么大(buffer_bytes)，装不下要先腾空。

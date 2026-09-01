@@ -1,6 +1,7 @@
 #pragma once
 // 全局类型、硬件配置、cycle<->time 换算、payload 扩展。
-// MVP-3：DMA↔Memory 使用 TLM AT 路径；其他组件保持 timing abstraction。
+// MVP-4：DMA → Interconnect → MemoryController → Hbm 全链路使用
+// TLM AT；Buffer 与 PE 等其他组件保持 timing abstraction。
 
 #include <systemc>
 #include <tlm>

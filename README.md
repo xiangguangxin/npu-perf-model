@@ -6,7 +6,7 @@
 >
 > 当前进度：**MVP-1（LT 数据流）+ MVP-2（PE Array + double buffering）+ MVP-3（DMA↔Memory 四相 AT）+ MVP-4（Interconnect/Arbiter + contention）已完成**。
 
-用 SystemC TLM2.0（DMA↔Memory 为四相 AT；其余模块为 timing abstraction）搭建的 weight-stationary 脉动阵列 NPU **性能模型**：输入 GEMM workload，输出吞吐 / 延迟 / 利用率预测，并支持 roofline 分析、配置敏感性研究与 validation。
+用 SystemC TLM2.0（DMA → Interconnect → MemoryController → HBM 全链路为四相 AT；其余模块为 timing abstraction）搭建的 weight-stationary 脉动阵列 NPU **性能模型**：输入 GEMM workload，输出吞吐 / 延迟 / 利用率预测，并支持 roofline 分析、配置敏感性研究与 validation。
 
 ## 技术栈
 

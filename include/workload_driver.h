@@ -25,12 +25,13 @@
 //     │  DmaEngine   │ │ OnchipBuffer │ │   PeArray    │ 纯 timing，不挂 socket
 //     │ read()/write │ │ 容量+带宽     │ │ fill/steady/ │ (Driver 直接查询)
 //     └──────┬───────┘ └──────────────┘ │    drain     │
-//      isock │═══ nb_transport (AT/四相) ═╗└──────────────┘
-//            ▼                           ║
-//     ┌──────────────┐                   ║ 只有这一条是 socket 通道
-//     │    Memory    │ ◄═════════════════╝
-//     │ HBM: 延迟+带宽│  (MVP-2 仍单 DMA 直连，Interconnect 是加分项)
-//     └──────────────┘
+//      isock │══ AT/四相 ══► Interconnect ══ AT/四相 ══► MemoryController
+//            │               排队/仲裁/背压                  带宽串行化
+//            │                                                    ║
+//            └─── DMA 的 socket 入口                              ║ AT/四相
+//                                                                 ▼
+//                                                               Hbm
+//                                                             固定延迟
 //
 //   仿真结束后，PerfMonitor 读取各模块统计量(run_time/bytes_moved/macs...) 出报告。
 //

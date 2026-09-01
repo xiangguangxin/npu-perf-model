@@ -33,13 +33,14 @@ void DmaEngine::wait_for(const TransferPtr& transfer) {
 DmaEngine::TransferPtr DmaEngine::submitTransfer(tlm_command cmd, uint64_t addr, uint32_t bytes,
                                                   TileExtension::Kind kind, uint32_t tile_id) {
     // outstanding 限制的是“已发 BEGIN_REQ 但尚未完成 END_RESP”的总数，不是仅在
-    // Memory 队列里的数量。这样可同时约束 payload 占用和 DMA 本身的请求窗口。
+    // Interconnect 队列里的数量。这样可同时约束 payload 占用和 DMA 本身的请求窗口。
     while (outstanding_ >= cfg_.dma_outstanding()) {
         wait(slot_free_ev_);
     }
 
     auto transfer = std::make_shared<Transfer>();
-    // 这是 timing-only 模型；Memory 不解引用 data_ptr。仍设置哑指针以满足 generic
+    // 这是 timing-only 模型；下游 Interconnect/MemoryController/Hbm 均不解引用
+    // data_ptr。仍设置哑指针以满足 generic
     // payload 的基本约定。真实功能模型则应分配至少 bytes 长度的数据缓冲。
     static unsigned char dummy[1] = {0};
 
@@ -64,10 +65,10 @@ DmaEngine::TransferPtr DmaEngine::submitTransfer(tlm_command cmd, uint64_t addr,
     active_[&gp] = transfer.get();
     ++outstanding_;     // DMA 又增加了一个尚未完成的 transaction
 
-    // DMA 通过 TLM socket 的 nb_transport_fw() 向 Memory 发起非阻塞请求
+    // DMA 通过 TLM socket 的 nb_transport_fw() 向 Interconnect 发起非阻塞请求
     const tlm_sync_enum status = isock->nb_transport_fw(gp, phase, delay);
     if (status == TLM_COMPLETED) {
-        // target 在 fw 调用内已经结束事务（本项目的 Memory 不使用该快捷路径）。
+        // target 在 fw 调用内已经结束事务（本项目的 Interconnect 不使用该快捷路径）。
         complete(*transfer);
     } else if (status == TLM_UPDATED && phase == BEGIN_RESP) {
         // 兼容 target 在 fw 返回值中立即给 BEGIN_RESP 的合法快捷路径。
@@ -82,7 +83,7 @@ DmaEngine::TransferPtr DmaEngine::submitTransfer(tlm_command cmd, uint64_t addr,
     return transfer;
 }
 
-// TLM 2.0 后向路径回调：处理 target（Memory）返回的四相握手响应。
+// TLM 2.0 后向路径回调：处理 target（Interconnect）返回的四相握手响应。
 // 四相协议流程：BEGIN_REQ(fw) → END_REQ(bw) → BEGIN_RESP(bw) → END_RESP(fw)
 tlm_sync_enum DmaEngine::nb_transport_bw(tlm_generic_payload& gp, tlm_phase& phase, sc_time& delay) {
     // 1. 根据 gp 地址查找对应的事务
