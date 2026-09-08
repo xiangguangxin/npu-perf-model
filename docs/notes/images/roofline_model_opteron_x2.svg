@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="740" viewBox="0 0 680 740" role="img" aria-labelledby="title desc">
+<title id="title">Roofline model for AMD Opteron X2</title>
+<desc id="desc">Redrawn from Figure 1(a). Logarithmic axes. Peak performance 17.6 GFLOP/s, memory bandwidth 15 GB/s. Operational intensities 0.5 and 2 FLOP/Byte illustrate memory and compute limits.</desc>
+<rect width="680" height="740" fill="white"/>
+<g font-family="Arial, sans-serif" font-size="16" fill="#222">
+<path d="M 100.0 90 V 650" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="100.0" y="676" text-anchor="middle">1/4</text>
+<path d="M 180.0 90 V 650" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="180.0" y="676" text-anchor="middle">1/2</text>
+<path d="M 260.0 90 V 650" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="260.0" y="676" text-anchor="middle">1</text>
+<path d="M 340.0 90 V 650" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="340.0" y="676" text-anchor="middle">2</text>
+<path d="M 420.0 90 V 650" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="420.0" y="676" text-anchor="middle">4</text>
+<path d="M 500.0 90 V 650" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="500.0" y="676" text-anchor="middle">8</text>
+<path d="M 580.0 90 V 650" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="580.0" y="676" text-anchor="middle">16</text>
+<path d="M 100 650.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="655.0" text-anchor="end">1/2</text>
+<path d="M 100 580.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="585.0" text-anchor="end">1</text>
+<path d="M 100 510.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="515.0" text-anchor="end">2</text>
+<path d="M 100 440.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="445.0" text-anchor="end">4</text>
+<path d="M 100 370.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="375.0" text-anchor="end">8</text>
+<path d="M 100 300.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="305.0" text-anchor="end">16</text>
+<path d="M 100 230.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="235.0" text-anchor="end">32</text>
+<path d="M 100 160.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="165.0" text-anchor="end">64</text>
+<path d="M 100 90.0 H 580" stroke="#ccc" stroke-dasharray="2 6"/>
+<text x="88" y="95.0" text-anchor="end">128</text>
+<rect x="100" y="90" width="480" height="560" fill="none" stroke="#777"/>
+<path d="M 180.0 650 V 376.5176583074037" stroke="#e626ed" stroke-width="3" stroke-dasharray="10 8"/>
+<text transform="translate(200.0 638) rotate(-90)" font-size="15">Operational intensity 1 (memory-bound)</text>
+<path d="M 340.0 650 V 290.37475333750456" stroke="#e626ed" stroke-width="3" stroke-dasharray="10 8"/>
+<text transform="translate(360.0 638) rotate(-90)" font-size="15">Operational intensity 2 (compute-bound)</text>
+<path d="M 100.0 446.5176583074037 L 278.4490342513133 290.37475333750456 H 580" fill="none" stroke="#111" stroke-width="4" stroke-linejoin="round"/>
+<text x="360" y="276.37475333750456" font-size="15">Peak floating-point performance</text>
+<text transform="translate(112 428.5176583074037) rotate(-41.19)" font-size="15">Peak memory bandwidth (STREAM)</text>
+<text x="340" y="714" text-anchor="middle">Operational Intensity (FLOP/Byte)</text>
+<text transform="translate(30 370) rotate(-90)" text-anchor="middle">Attainable Performance (GFLOP/s)</text>
+</g></svg>
