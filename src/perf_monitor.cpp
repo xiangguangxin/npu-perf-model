@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <fstream>
+#include <stdexcept>
 
 namespace npu_perf {
 
@@ -51,6 +53,7 @@ void PerfMonitor::report(const NpuConfig& cfg, const GemmTask& t,
               << " buffer_kb=" << cfg.buffer_kb()
               << " hbm_bw=" << cfg.hbm_bw_GBps() << "GB/s"
               << " hbm_lat=" << cfg.hbm_lat_cyc() << "cyc"
+              << " schedule=" << cfg.schedule()
               << " double_buffer=" << (cfg.double_buffer() ? "on" : "off") << "\n";
     std::cout << "fabric        : dma=" << cfg.dma_count()
               << " arbiter=" << arbiter_name(cfg.arbiter_policy())
@@ -97,6 +100,44 @@ void PerfMonitor::report(const NpuConfig& cfg, const GemmTask& t,
               << thru_flops / 1e9 << "," << util_pct << "," << ai << ","
               << ic.avg_queue_delay_ns() << "," << ic.queue_full_events() << ","
               << ic.total_stall_ns() << "\n";
+}
+
+// Integer counters and time ticks are preserved; provenance is added by the runner.
+void PerfMonitor::write_json(const std::string& path, const NpuConfig& c, const GemmTask& t,
+                             const Interconnect& ic, const MemoryController& mc,
+                             const PeArray& pe, const WorkloadDriver& drv) {
+    std::ofstream o(path);
+    if (!o) throw std::runtime_error("cannot open " + path);
+    o << std::setprecision(17) << "{\n";
+    auto field = [&](const char* k, auto v) { o << "  \"" << k << "\": " << v << ",\n"; };
+    field("schema_version", 1);
+    field("M", t.M()); field("K", t.K()); field("N", t.N());
+    field("array_n", c.array_n()); field("buffer_kb", c.buffer_kb());
+    field("data_bytes", c.data_bytes()); field("clock_hz", CLK_FREQ_HZ);
+    o << "  \"schedule\": \"" << c.schedule() << "\",\n";
+    o << "  \"arbiter\": \"" << arbiter_name(c.arbiter_policy()) << "\",\n";
+    field("dma", c.dma_count()); field("dma_outstanding", c.dma_outstanding());
+    field("queue_depth", c.queue_depth()); field("noc_latency", c.noc_latency());
+    field("hbm_bw_GBps", c.hbm_bw_GBps()); field("hbm_lat_cyc", c.hbm_lat_cyc());
+    field("interconnect_bw_GBps", c.interconnect_bw_GBps()); field("buf_bw_Bpc", c.buf_bw_Bpc());
+    field("time_resolution_s", sc_get_time_resolution().to_seconds());
+    field("sim_ticks", drv.run_time().value()); field("sim_s", drv.run_time().to_seconds());
+    field("requests", mc.serviced_reqs()); field("ic_requests", ic.requests());
+    field("bytes", mc.serviced_bytes()); field("passes", pe.passes()); field("macs", pe.macs());
+    const uint64_t useful = uint64_t(2) * t.M() * t.K() * t.N();
+    const uint64_t executed = pe.flops();
+    field("useful_ops", useful); field("executed_ops", executed);
+    field("useful_ops_s", drv.run_time().to_seconds() > 0 ? useful / drv.run_time().to_seconds() : 0);
+    field("executed_ops_s", drv.run_time().to_seconds() > 0 ? executed / drv.run_time().to_seconds() : 0);
+    field("useful_ai", mc.serviced_bytes() ? double(useful) / mc.serviced_bytes() : 0);
+    field("executed_ai", mc.serviced_bytes() ? double(executed) / mc.serviced_bytes() : 0);
+    field("avg_queue_ns", ic.avg_queue_delay_ns()); field("queue_full", ic.queue_full_events());
+    field("stall_ns", ic.total_stall_ns());
+    o << "  \"grants\": [";
+    for (uint32_t i=0; i<c.dma_count(); ++i) o << (i ? "," : "") << ic.granted(i);
+    o << "]\n}\n";
+    o.flush();
+    if (!o) throw std::runtime_error("cannot write " + path);
 }
 
 }  // namespace npu_perf

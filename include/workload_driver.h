@@ -4,7 +4,8 @@
 //
 // MVP-2：在 MVP-1 数据流基础上接入 PE 计算。把 GEMM 按 output tile 分块，每个
 // output tile 在 K 方向累加：逐个 K-slice 搬权重+激活 → PE 算一趟，累加完写回。
-// 两种调度由 NpuConfig.double_buffer 切换（构造时按需注册 SC_THREAD）：
+// 三种调度：serial/paired 共用顺序循环，double 使用两个 SC_THREAD。
+// paired 并发加载当前 slice 的两个输入，但不预取下一个 slice。
 //   - 串行(serial)     ：单线程 run_serial()，load→compute→store 完全不重叠，对照下界
 //   - 双缓冲(double buf)：两条 SC_THREAD 真并发 —— loader 预取、compute 消费，
 //                         用两块 ping-pong 载入槽 + sc_event 做生产者-消费者同步，

@@ -1,0 +1,837 @@
+case,metric,actual,expected,passed
+v_single_serial,schema,1,1,True
+v_single_serial,positive runtime,363000,>0,True
+v_single_serial,requests,3,3,True
+v_single_serial,ic_requests,3,3,True
+v_single_serial,bytes,768,768,True
+v_single_serial,passes,1,1,True
+v_single_serial,macs,4096,4096,True
+v_single_serial,executed_ops,8192,8192,True
+v_single_serial,useful_ops,8192,8192,True
+v_single_serial,PE lower bound,363000,48000,True
+v_single_serial,sim_ticks,363000,363000,True
+v_single_serial,HBM lower bound,3.63e-07,3e-09,True
+v_single_serial,grants conserved,3,3,True
+v_single_paired,schema,1,1,True
+v_single_paired,positive runtime,262000,>0,True
+v_single_paired,requests,3,3,True
+v_single_paired,ic_requests,3,3,True
+v_single_paired,bytes,768,768,True
+v_single_paired,passes,1,1,True
+v_single_paired,macs,4096,4096,True
+v_single_paired,executed_ops,8192,8192,True
+v_single_paired,useful_ops,8192,8192,True
+v_single_paired,PE lower bound,262000,48000,True
+v_single_paired,sim_ticks,262000,262000,True
+v_single_paired,HBM lower bound,2.6200000000000004e-07,3e-09,True
+v_single_paired,grants conserved,3,3,True
+v_single_double,schema,1,1,True
+v_single_double,positive runtime,262000,>0,True
+v_single_double,requests,3,3,True
+v_single_double,ic_requests,3,3,True
+v_single_double,bytes,768,768,True
+v_single_double,passes,1,1,True
+v_single_double,macs,4096,4096,True
+v_single_double,executed_ops,8192,8192,True
+v_single_double,useful_ops,8192,8192,True
+v_single_double,PE lower bound,262000,48000,True
+v_single_double,HBM lower bound,2.6200000000000004e-07,3e-09,True
+v_single_double,grants conserved,3,3,True
+v_multi_serial,schema,1,1,True
+v_multi_serial,positive runtime,2484000,>0,True
+v_multi_serial,requests,20,20,True
+v_multi_serial,ic_requests,20,20,True
+v_multi_serial,bytes,5120,5120,True
+v_multi_serial,passes,8,8,True
+v_multi_serial,macs,32768,32768,True
+v_multi_serial,executed_ops,65536,65536,True
+v_multi_serial,useful_ops,65536,65536,True
+v_multi_serial,PE lower bound,2484000,384000,True
+v_multi_serial,sim_ticks,2484000,2484000,True
+v_multi_serial,HBM lower bound,2.4840000000000003e-06,2e-08,True
+v_multi_serial,grants conserved,20,20,True
+v_multi_paired,schema,1,1,True
+v_multi_paired,positive runtime,1676000,>0,True
+v_multi_paired,requests,20,20,True
+v_multi_paired,ic_requests,20,20,True
+v_multi_paired,bytes,5120,5120,True
+v_multi_paired,passes,8,8,True
+v_multi_paired,macs,32768,32768,True
+v_multi_paired,executed_ops,65536,65536,True
+v_multi_paired,useful_ops,65536,65536,True
+v_multi_paired,PE lower bound,1676000,384000,True
+v_multi_paired,sim_ticks,1676000,1676000,True
+v_multi_paired,HBM lower bound,1.6760000000000001e-06,2e-08,True
+v_multi_paired,grants conserved,20,20,True
+v_multi_double,schema,1,1,True
+v_multi_double,positive runtime,1025000,>0,True
+v_multi_double,requests,20,20,True
+v_multi_double,ic_requests,20,20,True
+v_multi_double,bytes,5120,5120,True
+v_multi_double,passes,8,8,True
+v_multi_double,macs,32768,32768,True
+v_multi_double,executed_ops,65536,65536,True
+v_multi_double,useful_ops,65536,65536,True
+v_multi_double,PE lower bound,1025000,384000,True
+v_multi_double,HBM lower bound,1.0250000000000001e-06,2e-08,True
+v_multi_double,grants conserved,20,20,True
+v_rect_serial,schema,1,1,True
+v_rect_serial,positive runtime,34704000,>0,True
+v_rect_serial,requests,272,272,True
+v_rect_serial,ic_requests,272,272,True
+v_rect_serial,bytes,69632,69632,True
+v_rect_serial,passes,128,128,True
+v_rect_serial,macs,524288,524288,True
+v_rect_serial,executed_ops,1048576,1048576,True
+v_rect_serial,useful_ops,1048576,1048576,True
+v_rect_serial,PE lower bound,34704000,6144000,True
+v_rect_serial,sim_ticks,34704000,34704000,True
+v_rect_serial,HBM lower bound,3.4704000000000005e-05,2.72e-07,True
+v_rect_serial,grants conserved,272,272,True
+v_rect_paired,schema,1,1,True
+v_rect_paired,positive runtime,21776000,>0,True
+v_rect_paired,requests,272,272,True
+v_rect_paired,ic_requests,272,272,True
+v_rect_paired,bytes,69632,69632,True
+v_rect_paired,passes,128,128,True
+v_rect_paired,macs,524288,524288,True
+v_rect_paired,executed_ops,1048576,1048576,True
+v_rect_paired,useful_ops,1048576,1048576,True
+v_rect_paired,PE lower bound,21776000,6144000,True
+v_rect_paired,sim_ticks,21776000,21776000,True
+v_rect_paired,HBM lower bound,2.1776000000000003e-05,2.72e-07,True
+v_rect_paired,grants conserved,272,272,True
+v_rect_double,schema,1,1,True
+v_rect_double,positive runtime,14105000,>0,True
+v_rect_double,requests,272,272,True
+v_rect_double,ic_requests,272,272,True
+v_rect_double,bytes,69632,69632,True
+v_rect_double,passes,128,128,True
+v_rect_double,macs,524288,524288,True
+v_rect_double,executed_ops,1048576,1048576,True
+v_rect_double,useful_ops,1048576,1048576,True
+v_rect_double,PE lower bound,14105000,6144000,True
+v_rect_double,HBM lower bound,1.4105000000000001e-05,2.72e-07,True
+v_rect_double,grants conserved,272,272,True
+v_tiny_serial,schema,1,1,True
+v_tiny_serial,positive runtime,363000,>0,True
+v_tiny_serial,requests,3,3,True
+v_tiny_serial,ic_requests,3,3,True
+v_tiny_serial,bytes,768,768,True
+v_tiny_serial,passes,1,1,True
+v_tiny_serial,macs,4096,4096,True
+v_tiny_serial,executed_ops,8192,8192,True
+v_tiny_serial,useful_ops,2,2,True
+v_tiny_serial,PE lower bound,363000,48000,True
+v_tiny_serial,sim_ticks,363000,363000,True
+v_tiny_serial,HBM lower bound,3.63e-07,3e-09,True
+v_tiny_serial,grants conserved,3,3,True
+v_tiny_paired,schema,1,1,True
+v_tiny_paired,positive runtime,262000,>0,True
+v_tiny_paired,requests,3,3,True
+v_tiny_paired,ic_requests,3,3,True
+v_tiny_paired,bytes,768,768,True
+v_tiny_paired,passes,1,1,True
+v_tiny_paired,macs,4096,4096,True
+v_tiny_paired,executed_ops,8192,8192,True
+v_tiny_paired,useful_ops,2,2,True
+v_tiny_paired,PE lower bound,262000,48000,True
+v_tiny_paired,sim_ticks,262000,262000,True
+v_tiny_paired,HBM lower bound,2.6200000000000004e-07,3e-09,True
+v_tiny_paired,grants conserved,3,3,True
+v_tiny_double,schema,1,1,True
+v_tiny_double,positive runtime,262000,>0,True
+v_tiny_double,requests,3,3,True
+v_tiny_double,ic_requests,3,3,True
+v_tiny_double,bytes,768,768,True
+v_tiny_double,passes,1,1,True
+v_tiny_double,macs,4096,4096,True
+v_tiny_double,executed_ops,8192,8192,True
+v_tiny_double,useful_ops,2,2,True
+v_tiny_double,PE lower bound,262000,48000,True
+v_tiny_double,HBM lower bound,2.6200000000000004e-07,3e-09,True
+v_tiny_double,grants conserved,3,3,True
+v_edge_serial,schema,1,1,True
+v_edge_serial,positive runtime,2484000,>0,True
+v_edge_serial,requests,20,20,True
+v_edge_serial,ic_requests,20,20,True
+v_edge_serial,bytes,5120,5120,True
+v_edge_serial,passes,8,8,True
+v_edge_serial,macs,32768,32768,True
+v_edge_serial,executed_ops,65536,65536,True
+v_edge_serial,useful_ops,9826,9826,True
+v_edge_serial,PE lower bound,2484000,384000,True
+v_edge_serial,sim_ticks,2484000,2484000,True
+v_edge_serial,HBM lower bound,2.4840000000000003e-06,2e-08,True
+v_edge_serial,grants conserved,20,20,True
+v_edge_paired,schema,1,1,True
+v_edge_paired,positive runtime,1676000,>0,True
+v_edge_paired,requests,20,20,True
+v_edge_paired,ic_requests,20,20,True
+v_edge_paired,bytes,5120,5120,True
+v_edge_paired,passes,8,8,True
+v_edge_paired,macs,32768,32768,True
+v_edge_paired,executed_ops,65536,65536,True
+v_edge_paired,useful_ops,9826,9826,True
+v_edge_paired,PE lower bound,1676000,384000,True
+v_edge_paired,sim_ticks,1676000,1676000,True
+v_edge_paired,HBM lower bound,1.6760000000000001e-06,2e-08,True
+v_edge_paired,grants conserved,20,20,True
+v_edge_double,schema,1,1,True
+v_edge_double,positive runtime,1025000,>0,True
+v_edge_double,requests,20,20,True
+v_edge_double,ic_requests,20,20,True
+v_edge_double,bytes,5120,5120,True
+v_edge_double,passes,8,8,True
+v_edge_double,macs,32768,32768,True
+v_edge_double,executed_ops,65536,65536,True
+v_edge_double,useful_ops,9826,9826,True
+v_edge_double,PE lower bound,1025000,384000,True
+v_edge_double,HBM lower bound,1.0250000000000001e-06,2e-08,True
+v_edge_double,grants conserved,20,20,True
+v_uneven_serial,schema,1,1,True
+v_uneven_serial,positive runtime,8790000,>0,True
+v_uneven_serial,requests,70,70,True
+v_uneven_serial,ic_requests,70,70,True
+v_uneven_serial,bytes,17920,17920,True
+v_uneven_serial,passes,30,30,True
+v_uneven_serial,macs,122880,122880,True
+v_uneven_serial,executed_ops,245760,245760,True
+v_uneven_serial,useful_ops,132990,132990,True
+v_uneven_serial,PE lower bound,8790000,1440000,True
+v_uneven_serial,sim_ticks,8790000,8790000,True
+v_uneven_serial,HBM lower bound,8.79e-06,7e-08,True
+v_uneven_serial,grants conserved,70,70,True
+v_uneven_paired,schema,1,1,True
+v_uneven_paired,positive runtime,5760000,>0,True
+v_uneven_paired,requests,70,70,True
+v_uneven_paired,ic_requests,70,70,True
+v_uneven_paired,bytes,17920,17920,True
+v_uneven_paired,passes,30,30,True
+v_uneven_paired,macs,122880,122880,True
+v_uneven_paired,executed_ops,245760,245760,True
+v_uneven_paired,useful_ops,132990,132990,True
+v_uneven_paired,PE lower bound,5760000,1440000,True
+v_uneven_paired,sim_ticks,5760000,5760000,True
+v_uneven_paired,HBM lower bound,5.760000000000001e-06,7e-08,True
+v_uneven_paired,grants conserved,70,70,True
+v_uneven_double,schema,1,1,True
+v_uneven_double,positive runtime,3423000,>0,True
+v_uneven_double,requests,70,70,True
+v_uneven_double,ic_requests,70,70,True
+v_uneven_double,bytes,17920,17920,True
+v_uneven_double,passes,30,30,True
+v_uneven_double,macs,122880,122880,True
+v_uneven_double,executed_ops,245760,245760,True
+v_uneven_double,useful_ops,132990,132990,True
+v_uneven_double,PE lower bound,3423000,1440000,True
+v_uneven_double,HBM lower bound,3.423e-06,7e-08,True
+v_uneven_double,grants conserved,70,70,True
+v_array_8,schema,1,1,True
+v_array_8,positive runtime,122448000,>0,True
+v_array_8,requests,1088,1088,True
+v_array_8,ic_requests,1088,1088,True
+v_array_8,bytes,69632,69632,True
+v_array_8,passes,512,512,True
+v_array_8,macs,262144,262144,True
+v_array_8,executed_ops,524288,524288,True
+v_array_8,useful_ops,524288,524288,True
+v_array_8,PE lower bound,122448000,12288000,True
+v_array_8,sim_ticks,122448000,122448000,True
+v_array_8,HBM lower bound,0.00012244800000000002,2.72e-07,True
+v_array_8,grants conserved,1088,1088,True
+v_array_32,schema,1,1,True
+v_array_32,positive runtime,3168000,>0,True
+v_array_32,requests,20,20,True
+v_array_32,ic_requests,20,20,True
+v_array_32,bytes,20480,20480,True
+v_array_32,passes,8,8,True
+v_array_32,macs,262144,262144,True
+v_array_32,executed_ops,524288,524288,True
+v_array_32,useful_ops,524288,524288,True
+v_array_32,PE lower bound,3168000,768000,True
+v_array_32,sim_ticks,3168000,3168000,True
+v_array_32,HBM lower bound,3.1680000000000004e-06,8e-08,True
+v_array_32,grants conserved,20,20,True
+v_noc_2,schema,1,1,True
+v_noc_2,positive runtime,369000,>0,True
+v_noc_2,requests,3,3,True
+v_noc_2,ic_requests,3,3,True
+v_noc_2,bytes,768,768,True
+v_noc_2,passes,1,1,True
+v_noc_2,macs,4096,4096,True
+v_noc_2,executed_ops,8192,8192,True
+v_noc_2,useful_ops,8192,8192,True
+v_noc_2,PE lower bound,369000,48000,True
+v_noc_2,sim_ticks,369000,369000,True
+v_noc_2,HBM lower bound,3.6900000000000004e-07,3e-09,True
+v_noc_2,grants conserved,3,3,True
+v_noc_10,schema,1,1,True
+v_noc_10,positive runtime,393000,>0,True
+v_noc_10,requests,3,3,True
+v_noc_10,ic_requests,3,3,True
+v_noc_10,bytes,768,768,True
+v_noc_10,passes,1,1,True
+v_noc_10,macs,4096,4096,True
+v_noc_10,executed_ops,8192,8192,True
+v_noc_10,useful_ops,8192,8192,True
+v_noc_10,PE lower bound,393000,48000,True
+v_noc_10,sim_ticks,393000,393000,True
+v_noc_10,HBM lower bound,3.9300000000000004e-07,3e-09,True
+v_noc_10,grants conserved,3,3,True
+v_repeat,schema,1,1,True
+v_repeat,positive runtime,1025000,>0,True
+v_repeat,requests,20,20,True
+v_repeat,ic_requests,20,20,True
+v_repeat,bytes,5120,5120,True
+v_repeat,passes,8,8,True
+v_repeat,macs,32768,32768,True
+v_repeat,executed_ops,65536,65536,True
+v_repeat,useful_ops,65536,65536,True
+v_repeat,PE lower bound,1025000,384000,True
+v_repeat,HBM lower bound,1.0250000000000001e-06,2e-08,True
+v_repeat,grants conserved,20,20,True
+e1_32_serial,schema,1,1,True
+e1_32_serial,positive runtime,2484000,>0,True
+e1_32_serial,requests,20,20,True
+e1_32_serial,ic_requests,20,20,True
+e1_32_serial,bytes,5120,5120,True
+e1_32_serial,passes,8,8,True
+e1_32_serial,macs,32768,32768,True
+e1_32_serial,executed_ops,65536,65536,True
+e1_32_serial,useful_ops,65536,65536,True
+e1_32_serial,PE lower bound,2484000,384000,True
+e1_32_serial,sim_ticks,2484000,2484000,True
+e1_32_serial,HBM lower bound,2.4840000000000003e-06,2e-08,True
+e1_32_serial,grants conserved,20,20,True
+e1_32_paired,schema,1,1,True
+e1_32_paired,positive runtime,1676000,>0,True
+e1_32_paired,requests,20,20,True
+e1_32_paired,ic_requests,20,20,True
+e1_32_paired,bytes,5120,5120,True
+e1_32_paired,passes,8,8,True
+e1_32_paired,macs,32768,32768,True
+e1_32_paired,executed_ops,65536,65536,True
+e1_32_paired,useful_ops,65536,65536,True
+e1_32_paired,PE lower bound,1676000,384000,True
+e1_32_paired,sim_ticks,1676000,1676000,True
+e1_32_paired,HBM lower bound,1.6760000000000001e-06,2e-08,True
+e1_32_paired,grants conserved,20,20,True
+e1_32_double,schema,1,1,True
+e1_32_double,positive runtime,1025000,>0,True
+e1_32_double,requests,20,20,True
+e1_32_double,ic_requests,20,20,True
+e1_32_double,bytes,5120,5120,True
+e1_32_double,passes,8,8,True
+e1_32_double,macs,32768,32768,True
+e1_32_double,executed_ops,65536,65536,True
+e1_32_double,useful_ops,65536,65536,True
+e1_32_double,PE lower bound,1025000,384000,True
+e1_32_double,HBM lower bound,1.0250000000000001e-06,2e-08,True
+e1_32_double,grants conserved,20,20,True
+e1_128_serial,schema,1,1,True
+e1_128_serial,positive runtime,138816000,>0,True
+e1_128_serial,requests,1088,1088,True
+e1_128_serial,ic_requests,1088,1088,True
+e1_128_serial,bytes,278528,278528,True
+e1_128_serial,passes,512,512,True
+e1_128_serial,macs,2097152,2097152,True
+e1_128_serial,executed_ops,4194304,4194304,True
+e1_128_serial,useful_ops,4194304,4194304,True
+e1_128_serial,PE lower bound,138816000,24576000,True
+e1_128_serial,sim_ticks,138816000,138816000,True
+e1_128_serial,HBM lower bound,0.00013881600000000002,1.088e-06,True
+e1_128_serial,grants conserved,1088,1088,True
+e1_128_paired,schema,1,1,True
+e1_128_paired,positive runtime,87104000,>0,True
+e1_128_paired,requests,1088,1088,True
+e1_128_paired,ic_requests,1088,1088,True
+e1_128_paired,bytes,278528,278528,True
+e1_128_paired,passes,512,512,True
+e1_128_paired,macs,2097152,2097152,True
+e1_128_paired,executed_ops,4194304,4194304,True
+e1_128_paired,useful_ops,4194304,4194304,True
+e1_128_paired,PE lower bound,87104000,24576000,True
+e1_128_paired,sim_ticks,87104000,87104000,True
+e1_128_paired,HBM lower bound,8.710400000000001e-05,1.088e-06,True
+e1_128_paired,grants conserved,1088,1088,True
+e1_128_double,schema,1,1,True
+e1_128_double,positive runtime,55961000,>0,True
+e1_128_double,requests,1088,1088,True
+e1_128_double,ic_requests,1088,1088,True
+e1_128_double,bytes,278528,278528,True
+e1_128_double,passes,512,512,True
+e1_128_double,macs,2097152,2097152,True
+e1_128_double,executed_ops,4194304,4194304,True
+e1_128_double,useful_ops,4194304,4194304,True
+e1_128_double,PE lower bound,55961000,24576000,True
+e1_128_double,HBM lower bound,5.5961e-05,1.088e-06,True
+e1_128_double,grants conserved,1088,1088,True
+e1_512_serial,schema,1,1,True
+e1_512_serial,positive runtime,8561664000,>0,True
+e1_512_serial,requests,66560,66560,True
+e1_512_serial,ic_requests,66560,66560,True
+e1_512_serial,bytes,17039360,17039360,True
+e1_512_serial,passes,32768,32768,True
+e1_512_serial,macs,134217728,134217728,True
+e1_512_serial,executed_ops,268435456,268435456,True
+e1_512_serial,useful_ops,268435456,268435456,True
+e1_512_serial,PE lower bound,8561664000,1572864000,True
+e1_512_serial,sim_ticks,8561664000,8561664000,True
+e1_512_serial,HBM lower bound,0.008561664,6.656e-05,True
+e1_512_serial,grants conserved,66560,66560,True
+e1_512_paired,schema,1,1,True
+e1_512_paired,positive runtime,5252096000,>0,True
+e1_512_paired,requests,66560,66560,True
+e1_512_paired,ic_requests,66560,66560,True
+e1_512_paired,bytes,17039360,17039360,True
+e1_512_paired,passes,32768,32768,True
+e1_512_paired,macs,134217728,134217728,True
+e1_512_paired,executed_ops,268435456,268435456,True
+e1_512_paired,useful_ops,268435456,268435456,True
+e1_512_paired,PE lower bound,5252096000,1572864000,True
+e1_512_paired,sim_ticks,5252096000,5252096000,True
+e1_512_paired,HBM lower bound,0.005252096,6.656e-05,True
+e1_512_paired,grants conserved,66560,66560,True
+e1_512_double,schema,1,1,True
+e1_512_double,positive runtime,3571865000,>0,True
+e1_512_double,requests,66560,66560,True
+e1_512_double,ic_requests,66560,66560,True
+e1_512_double,bytes,17039360,17039360,True
+e1_512_double,passes,32768,32768,True
+e1_512_double,macs,134217728,134217728,True
+e1_512_double,executed_ops,268435456,268435456,True
+e1_512_double,useful_ops,268435456,268435456,True
+e1_512_double,PE lower bound,3571865000,1572864000,True
+e1_512_double,HBM lower bound,0.0035718650000000005,6.656e-05,True
+e1_512_double,grants conserved,66560,66560,True
+e2_8,schema,1,1,True
+e2_8,positive runtime,70297000,>0,True
+e2_8,requests,1088,1088,True
+e2_8,ic_requests,1088,1088,True
+e2_8,bytes,278528,278528,True
+e2_8,passes,512,512,True
+e2_8,macs,2097152,2097152,True
+e2_8,executed_ops,4194304,4194304,True
+e2_8,useful_ops,4194304,4194304,True
+e2_8,PE lower bound,70297000,24576000,True
+e2_8,HBM lower bound,7.029700000000001e-05,1.088e-06,True
+e2_8,grants conserved,1088,1088,True
+e2_16,schema,1,1,True
+e2_16,positive runtime,62105000,>0,True
+e2_16,requests,1088,1088,True
+e2_16,ic_requests,1088,1088,True
+e2_16,bytes,278528,278528,True
+e2_16,passes,512,512,True
+e2_16,macs,2097152,2097152,True
+e2_16,executed_ops,4194304,4194304,True
+e2_16,useful_ops,4194304,4194304,True
+e2_16,PE lower bound,62105000,24576000,True
+e2_16,HBM lower bound,6.2105e-05,1.088e-06,True
+e2_16,grants conserved,1088,1088,True
+e2_32,schema,1,1,True
+e2_32,positive runtime,58009000,>0,True
+e2_32,requests,1088,1088,True
+e2_32,ic_requests,1088,1088,True
+e2_32,bytes,278528,278528,True
+e2_32,passes,512,512,True
+e2_32,macs,2097152,2097152,True
+e2_32,executed_ops,4194304,4194304,True
+e2_32,useful_ops,4194304,4194304,True
+e2_32,PE lower bound,58009000,24576000,True
+e2_32,HBM lower bound,5.8009000000000007e-05,1.088e-06,True
+e2_32,grants conserved,1088,1088,True
+e2_64,schema,1,1,True
+e2_64,positive runtime,55961000,>0,True
+e2_64,requests,1088,1088,True
+e2_64,ic_requests,1088,1088,True
+e2_64,bytes,278528,278528,True
+e2_64,passes,512,512,True
+e2_64,macs,2097152,2097152,True
+e2_64,executed_ops,4194304,4194304,True
+e2_64,useful_ops,4194304,4194304,True
+e2_64,PE lower bound,55961000,24576000,True
+e2_64,HBM lower bound,5.5961e-05,1.088e-06,True
+e2_64,grants conserved,1088,1088,True
+e2_128,schema,1,1,True
+e2_128,positive runtime,55961000,>0,True
+e2_128,requests,1088,1088,True
+e2_128,ic_requests,1088,1088,True
+e2_128,bytes,278528,278528,True
+e2_128,passes,512,512,True
+e2_128,macs,2097152,2097152,True
+e2_128,executed_ops,4194304,4194304,True
+e2_128,useful_ops,4194304,4194304,True
+e2_128,PE lower bound,55961000,24576000,True
+e2_128,HBM lower bound,5.5961e-05,1.088e-06,True
+e2_128,grants conserved,1088,1088,True
+e2_256,schema,1,1,True
+e2_256,positive runtime,55961000,>0,True
+e2_256,requests,1088,1088,True
+e2_256,ic_requests,1088,1088,True
+e2_256,bytes,278528,278528,True
+e2_256,passes,512,512,True
+e2_256,macs,2097152,2097152,True
+e2_256,executed_ops,4194304,4194304,True
+e2_256,useful_ops,4194304,4194304,True
+e2_256,PE lower bound,55961000,24576000,True
+e2_256,HBM lower bound,5.5961e-05,1.088e-06,True
+e2_256,grants conserved,1088,1088,True
+e3_32_8_32,schema,1,1,True
+e3_32_8_32,positive runtime,6733250,>0,True
+e3_32_8_32,requests,144,144,True
+e3_32_8_32,ic_requests,144,144,True
+e3_32_8_32,bytes,9216,9216,True
+e3_32_8_32,passes,64,64,True
+e3_32_8_32,macs,32768,32768,True
+e3_32_8_32,executed_ops,65536,65536,True
+e3_32_8_32,useful_ops,65536,65536,True
+e3_32_8_32,PE lower bound,6733250,1536000,True
+e3_32_8_32,HBM lower bound,6.73325e-06,3.6e-08,True
+e3_32_8_32,grants conserved,144,144,True
+e3_32_8_256,schema,1,1,True
+e3_32_8_256,positive runtime,6669250,>0,True
+e3_32_8_256,requests,144,144,True
+e3_32_8_256,ic_requests,144,144,True
+e3_32_8_256,bytes,9216,9216,True
+e3_32_8_256,passes,64,64,True
+e3_32_8_256,macs,32768,32768,True
+e3_32_8_256,executed_ops,65536,65536,True
+e3_32_8_256,useful_ops,65536,65536,True
+e3_32_8_256,PE lower bound,6669250,1536000,True
+e3_32_8_256,HBM lower bound,6.6692500000000006e-06,3.6e-08,True
+e3_32_8_256,grants conserved,144,144,True
+e3_32_16_32,schema,1,1,True
+e3_32_16_32,positive runtime,1057000,>0,True
+e3_32_16_32,requests,20,20,True
+e3_32_16_32,ic_requests,20,20,True
+e3_32_16_32,bytes,5120,5120,True
+e3_32_16_32,passes,8,8,True
+e3_32_16_32,macs,32768,32768,True
+e3_32_16_32,executed_ops,65536,65536,True
+e3_32_16_32,useful_ops,65536,65536,True
+e3_32_16_32,PE lower bound,1057000,384000,True
+e3_32_16_32,HBM lower bound,1.057e-06,2e-08,True
+e3_32_16_32,grants conserved,20,20,True
+e3_32_16_256,schema,1,1,True
+e3_32_16_256,positive runtime,1025000,>0,True
+e3_32_16_256,requests,20,20,True
+e3_32_16_256,ic_requests,20,20,True
+e3_32_16_256,bytes,5120,5120,True
+e3_32_16_256,passes,8,8,True
+e3_32_16_256,macs,32768,32768,True
+e3_32_16_256,executed_ops,65536,65536,True
+e3_32_16_256,useful_ops,65536,65536,True
+e3_32_16_256,PE lower bound,1025000,384000,True
+e3_32_16_256,HBM lower bound,1.0250000000000001e-06,2e-08,True
+e3_32_16_256,grants conserved,20,20,True
+e3_32_32_32,schema,1,1,True
+e3_32_32_32,positive runtime,368000,>0,True
+e3_32_32_32,requests,3,3,True
+e3_32_32_32,ic_requests,3,3,True
+e3_32_32_32,bytes,3072,3072,True
+e3_32_32_32,passes,1,1,True
+e3_32_32_32,macs,32768,32768,True
+e3_32_32_32,executed_ops,65536,65536,True
+e3_32_32_32,useful_ops,65536,65536,True
+e3_32_32_32,PE lower bound,368000,96000,True
+e3_32_32_32,HBM lower bound,3.68e-07,1.2e-08,True
+e3_32_32_32,grants conserved,3,3,True
+e3_32_32_256,schema,1,1,True
+e3_32_32_256,positive runtime,352000,>0,True
+e3_32_32_256,requests,3,3,True
+e3_32_32_256,ic_requests,3,3,True
+e3_32_32_256,bytes,3072,3072,True
+e3_32_32_256,passes,1,1,True
+e3_32_32_256,macs,32768,32768,True
+e3_32_32_256,executed_ops,65536,65536,True
+e3_32_32_256,useful_ops,65536,65536,True
+e3_32_32_256,PE lower bound,352000,96000,True
+e3_32_32_256,HBM lower bound,3.5200000000000003e-07,1.2e-08,True
+e3_32_32_256,grants conserved,3,3,True
+e3_128_8_32,schema,1,1,True
+e3_128_8_32,positive runtime,423037250,>0,True
+e3_128_8_32,requests,8448,8448,True
+e3_128_8_32,ic_requests,8448,8448,True
+e3_128_8_32,bytes,540672,540672,True
+e3_128_8_32,passes,4096,4096,True
+e3_128_8_32,macs,2097152,2097152,True
+e3_128_8_32,executed_ops,4194304,4194304,True
+e3_128_8_32,useful_ops,4194304,4194304,True
+e3_128_8_32,PE lower bound,423037250,98304000,True
+e3_128_8_32,HBM lower bound,0.00042303725000000005,2.112e-06,True
+e3_128_8_32,grants conserved,8448,8448,True
+e3_128_8_256,schema,1,1,True
+e3_128_8_256,positive runtime,418941250,>0,True
+e3_128_8_256,requests,8448,8448,True
+e3_128_8_256,ic_requests,8448,8448,True
+e3_128_8_256,bytes,540672,540672,True
+e3_128_8_256,passes,4096,4096,True
+e3_128_8_256,macs,2097152,2097152,True
+e3_128_8_256,executed_ops,4194304,4194304,True
+e3_128_8_256,useful_ops,4194304,4194304,True
+e3_128_8_256,PE lower bound,418941250,98304000,True
+e3_128_8_256,HBM lower bound,0.00041894125,2.112e-06,True
+e3_128_8_256,grants conserved,8448,8448,True
+e3_128_16_32,schema,1,1,True
+e3_128_16_32,positive runtime,58009000,>0,True
+e3_128_16_32,requests,1088,1088,True
+e3_128_16_32,ic_requests,1088,1088,True
+e3_128_16_32,bytes,278528,278528,True
+e3_128_16_32,passes,512,512,True
+e3_128_16_32,macs,2097152,2097152,True
+e3_128_16_32,executed_ops,4194304,4194304,True
+e3_128_16_32,useful_ops,4194304,4194304,True
+e3_128_16_32,PE lower bound,58009000,24576000,True
+e3_128_16_32,HBM lower bound,5.8009000000000007e-05,1.088e-06,True
+e3_128_16_32,grants conserved,1088,1088,True
+e3_128_16_256,schema,1,1,True
+e3_128_16_256,positive runtime,55961000,>0,True
+e3_128_16_256,requests,1088,1088,True
+e3_128_16_256,ic_requests,1088,1088,True
+e3_128_16_256,bytes,278528,278528,True
+e3_128_16_256,passes,512,512,True
+e3_128_16_256,macs,2097152,2097152,True
+e3_128_16_256,executed_ops,4194304,4194304,True
+e3_128_16_256,useful_ops,4194304,4194304,True
+e3_128_16_256,PE lower bound,55961000,24576000,True
+e3_128_16_256,HBM lower bound,5.5961e-05,1.088e-06,True
+e3_128_16_256,grants conserved,1088,1088,True
+e3_128_32_32,schema,1,1,True
+e3_128_32_32,positive runtime,10064000,>0,True
+e3_128_32_32,requests,144,144,True
+e3_128_32_32,ic_requests,144,144,True
+e3_128_32_32,bytes,147456,147456,True
+e3_128_32_32,passes,64,64,True
+e3_128_32_32,macs,2097152,2097152,True
+e3_128_32_32,executed_ops,4194304,4194304,True
+e3_128_32_32,useful_ops,4194304,4194304,True
+e3_128_32_32,PE lower bound,10064000,6144000,True
+e3_128_32_32,HBM lower bound,1.0064e-05,5.76e-07,True
+e3_128_32_32,grants conserved,144,144,True
+e3_128_32_256,schema,1,1,True
+e3_128_32_256,positive runtime,9520000,>0,True
+e3_128_32_256,requests,144,144,True
+e3_128_32_256,ic_requests,144,144,True
+e3_128_32_256,bytes,147456,147456,True
+e3_128_32_256,passes,64,64,True
+e3_128_32_256,macs,2097152,2097152,True
+e3_128_32_256,executed_ops,4194304,4194304,True
+e3_128_32_256,useful_ops,4194304,4194304,True
+e3_128_32_256,PE lower bound,9520000,6144000,True
+e3_128_32_256,HBM lower bound,9.52e-06,5.76e-07,True
+e3_128_32_256,grants conserved,144,144,True
+e4_16_16,schema,1,1,True
+e4_16_16,positive runtime,11565000,>0,True
+e4_16_16,requests,192,192,True
+e4_16_16,ic_requests,192,192,True
+e4_16_16,bytes,49152,49152,True
+e4_16_16,passes,64,64,True
+e4_16_16,macs,262144,262144,True
+e4_16_16,executed_ops,524288,524288,True
+e4_16_16,useful_ops,524288,524288,True
+e4_16_16,PE lower bound,11565000,3072000,True
+e4_16_16,HBM lower bound,1.1565e-05,1.92e-07,True
+e4_16_16,grants conserved,192,192,True
+e4_16_256,schema,1,1,True
+e4_16_256,positive runtime,9901000,>0,True
+e4_16_256,requests,192,192,True
+e4_16_256,ic_requests,192,192,True
+e4_16_256,bytes,49152,49152,True
+e4_16_256,passes,64,64,True
+e4_16_256,macs,262144,262144,True
+e4_16_256,executed_ops,524288,524288,True
+e4_16_256,useful_ops,524288,524288,True
+e4_16_256,PE lower bound,9901000,3072000,True
+e4_16_256,HBM lower bound,9.901e-06,1.92e-07,True
+e4_16_256,grants conserved,192,192,True
+e4_32_16,schema,1,1,True
+e4_32_16,positive runtime,15641000,>0,True
+e4_32_16,requests,320,320,True
+e4_32_16,ic_requests,320,320,True
+e4_32_16,bytes,81920,81920,True
+e4_32_16,passes,128,128,True
+e4_32_16,macs,524288,524288,True
+e4_32_16,executed_ops,1048576,1048576,True
+e4_32_16,useful_ops,1048576,1048576,True
+e4_32_16,PE lower bound,15641000,6144000,True
+e4_32_16,HBM lower bound,1.5641e-05,3.2e-07,True
+e4_32_16,grants conserved,320,320,True
+e4_32_256,schema,1,1,True
+e4_32_256,positive runtime,14105000,>0,True
+e4_32_256,requests,320,320,True
+e4_32_256,ic_requests,320,320,True
+e4_32_256,bytes,81920,81920,True
+e4_32_256,passes,128,128,True
+e4_32_256,macs,524288,524288,True
+e4_32_256,executed_ops,1048576,1048576,True
+e4_32_256,useful_ops,1048576,1048576,True
+e4_32_256,PE lower bound,14105000,6144000,True
+e4_32_256,HBM lower bound,1.4105000000000001e-05,3.2e-07,True
+e4_32_256,grants conserved,320,320,True
+e4_128_16,schema,1,1,True
+e4_128_16,positive runtime,62105000,>0,True
+e4_128_16,requests,1088,1088,True
+e4_128_16,ic_requests,1088,1088,True
+e4_128_16,bytes,278528,278528,True
+e4_128_16,passes,512,512,True
+e4_128_16,macs,2097152,2097152,True
+e4_128_16,executed_ops,4194304,4194304,True
+e4_128_16,useful_ops,4194304,4194304,True
+e4_128_16,PE lower bound,62105000,24576000,True
+e4_128_16,HBM lower bound,6.2105e-05,1.088e-06,True
+e4_128_16,grants conserved,1088,1088,True
+e4_128_256,schema,1,1,True
+e4_128_256,positive runtime,55961000,>0,True
+e4_128_256,requests,1088,1088,True
+e4_128_256,ic_requests,1088,1088,True
+e4_128_256,bytes,278528,278528,True
+e4_128_256,passes,512,512,True
+e4_128_256,macs,2097152,2097152,True
+e4_128_256,executed_ops,4194304,4194304,True
+e4_128_256,useful_ops,4194304,4194304,True
+e4_128_256,PE lower bound,55961000,24576000,True
+e4_128_256,HBM lower bound,5.5961e-05,1.088e-06,True
+e4_128_256,grants conserved,1088,1088,True
+e4_512_16,schema,1,1,True
+e4_512_16,positive runtime,247961000,>0,True
+e4_512_16,requests,4160,4160,True
+e4_512_16,ic_requests,4160,4160,True
+e4_512_16,bytes,1064960,1064960,True
+e4_512_16,passes,2048,2048,True
+e4_512_16,macs,8388608,8388608,True
+e4_512_16,executed_ops,16777216,16777216,True
+e4_512_16,useful_ops,16777216,16777216,True
+e4_512_16,PE lower bound,247961000,98304000,True
+e4_512_16,HBM lower bound,0.000247961,4.16e-06,True
+e4_512_16,grants conserved,4160,4160,True
+e4_512_256,schema,1,1,True
+e4_512_256,positive runtime,223385000,>0,True
+e4_512_256,requests,4160,4160,True
+e4_512_256,ic_requests,4160,4160,True
+e4_512_256,bytes,1064960,1064960,True
+e4_512_256,passes,2048,2048,True
+e4_512_256,macs,8388608,8388608,True
+e4_512_256,executed_ops,16777216,16777216,True
+e4_512_256,useful_ops,16777216,16777216,True
+e4_512_256,PE lower bound,223385000,98304000,True
+e4_512_256,HBM lower bound,0.00022338500000000002,4.16e-06,True
+e4_512_256,grants conserved,4160,4160,True
+e5_4,schema,1,1,True
+e5_4,positive runtime,55961000,>0,True
+e5_4,requests,1088,1088,True
+e5_4,ic_requests,1088,1088,True
+e5_4,bytes,278528,278528,True
+e5_4,passes,512,512,True
+e5_4,macs,2097152,2097152,True
+e5_4,executed_ops,4194304,4194304,True
+e5_4,useful_ops,4194304,4194304,True
+e5_4,PE lower bound,55961000,24576000,True
+e5_4,HBM lower bound,5.5961e-05,1.088e-06,True
+e5_4,grants conserved,1088,1088,True
+e5_16,schema,1,1,True
+e5_16,positive runtime,55961000,>0,True
+e5_16,requests,1088,1088,True
+e5_16,ic_requests,1088,1088,True
+e5_16,bytes,278528,278528,True
+e5_16,passes,512,512,True
+e5_16,macs,2097152,2097152,True
+e5_16,executed_ops,4194304,4194304,True
+e5_16,useful_ops,4194304,4194304,True
+e5_16,PE lower bound,55961000,24576000,True
+e5_16,HBM lower bound,5.5961e-05,1.088e-06,True
+e5_16,grants conserved,1088,1088,True
+e5_64,schema,1,1,True
+e5_64,positive runtime,55961000,>0,True
+e5_64,requests,1088,1088,True
+e5_64,ic_requests,1088,1088,True
+e5_64,bytes,278528,278528,True
+e5_64,passes,512,512,True
+e5_64,macs,2097152,2097152,True
+e5_64,executed_ops,4194304,4194304,True
+e5_64,useful_ops,4194304,4194304,True
+e5_64,PE lower bound,55961000,24576000,True
+e5_64,HBM lower bound,5.5961e-05,1.088e-06,True
+e5_64,grants conserved,1088,1088,True
+e5_256,schema,1,1,True
+e5_256,positive runtime,55961000,>0,True
+e5_256,requests,1088,1088,True
+e5_256,ic_requests,1088,1088,True
+e5_256,bytes,278528,278528,True
+e5_256,passes,512,512,True
+e5_256,macs,2097152,2097152,True
+e5_256,executed_ops,4194304,4194304,True
+e5_256,useful_ops,4194304,4194304,True
+e5_256,PE lower bound,55961000,24576000,True
+e5_256,HBM lower bound,5.5961e-05,1.088e-06,True
+e5_256,grants conserved,1088,1088,True
+hand_anchor,363 ns,363000,363000,True
+hand_anchor,paired 262 ns,262000,262000,True
+e1_32_serial,E1 invariant bytes,5120,5120,True
+e1_32_serial,E1 invariant executed_ops,65536,65536,True
+e1_32_serial,E1 invariant requests,20,20,True
+e1_32_paired,E1 invariant bytes,5120,5120,True
+e1_32_paired,E1 invariant executed_ops,65536,65536,True
+e1_32_paired,E1 invariant requests,20,20,True
+e1_32_double,E1 invariant bytes,5120,5120,True
+e1_32_double,E1 invariant executed_ops,65536,65536,True
+e1_32_double,E1 invariant requests,20,20,True
+e1_128_serial,E1 invariant bytes,278528,278528,True
+e1_128_serial,E1 invariant executed_ops,4194304,4194304,True
+e1_128_serial,E1 invariant requests,1088,1088,True
+e1_128_paired,E1 invariant bytes,278528,278528,True
+e1_128_paired,E1 invariant executed_ops,4194304,4194304,True
+e1_128_paired,E1 invariant requests,1088,1088,True
+e1_128_double,E1 invariant bytes,278528,278528,True
+e1_128_double,E1 invariant executed_ops,4194304,4194304,True
+e1_128_double,E1 invariant requests,1088,1088,True
+e1_512_serial,E1 invariant bytes,17039360,17039360,True
+e1_512_serial,E1 invariant executed_ops,268435456,268435456,True
+e1_512_serial,E1 invariant requests,66560,66560,True
+e1_512_paired,E1 invariant bytes,17039360,17039360,True
+e1_512_paired,E1 invariant executed_ops,268435456,268435456,True
+e1_512_paired,E1 invariant requests,66560,66560,True
+e1_512_double,E1 invariant bytes,17039360,17039360,True
+e1_512_double,E1 invariant executed_ops,268435456,268435456,True
+e1_512_double,E1 invariant requests,66560,66560,True
+e2_8,E2 invariant bytes,278528,278528,True
+e2_8,E2 invariant executed_ops,4194304,4194304,True
+e2_8,E2 invariant requests,1088,1088,True
+e2_16,E2 invariant bytes,278528,278528,True
+e2_16,E2 invariant executed_ops,4194304,4194304,True
+e2_16,E2 invariant requests,1088,1088,True
+e2_32,E2 invariant bytes,278528,278528,True
+e2_32,E2 invariant executed_ops,4194304,4194304,True
+e2_32,E2 invariant requests,1088,1088,True
+e2_64,E2 invariant bytes,278528,278528,True
+e2_64,E2 invariant executed_ops,4194304,4194304,True
+e2_64,E2 invariant requests,1088,1088,True
+e2_128,E2 invariant bytes,278528,278528,True
+e2_128,E2 invariant executed_ops,4194304,4194304,True
+e2_128,E2 invariant requests,1088,1088,True
+e2_256,E2 invariant bytes,278528,278528,True
+e2_256,E2 invariant executed_ops,4194304,4194304,True
+e2_256,E2 invariant requests,1088,1088,True
+e5_4,E5 invariant bytes,278528,278528,True
+e5_4,E5 invariant executed_ops,4194304,4194304,True
+e5_4,E5 invariant requests,1088,1088,True
+e5_4,E5 invariant sim_ticks,55961000,55961000,True
+e5_16,E5 invariant bytes,278528,278528,True
+e5_16,E5 invariant executed_ops,4194304,4194304,True
+e5_16,E5 invariant requests,1088,1088,True
+e5_16,E5 invariant sim_ticks,55961000,55961000,True
+e5_64,E5 invariant bytes,278528,278528,True
+e5_64,E5 invariant executed_ops,4194304,4194304,True
+e5_64,E5 invariant requests,1088,1088,True
+e5_64,E5 invariant sim_ticks,55961000,55961000,True
+e5_256,E5 invariant bytes,278528,278528,True
+e5_256,E5 invariant executed_ops,4194304,4194304,True
+e5_256,E5 invariant requests,1088,1088,True
+e5_256,E5 invariant sim_ticks,55961000,55961000,True
+determinism,bytes,5120,5120,True
+determinism,requests,20,20,True
+determinism,executed_ops,65536,65536,True
+determinism,sim_ticks,1025000,1025000,True
+determinism,grants,[20],[20],True
+determinism,avg_queue_ns,0.4,0.4,True
+determinism,stall_ns,0,0,True

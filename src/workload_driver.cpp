@@ -48,8 +48,19 @@ void WorkloadDriver::run_serial() {
         for (uint32_t j = 0; j < nt; ++j) {
             buf_->allocate(bytes);                       // output tile 累加器
             for (uint32_t k = 0; k < kt; ++k) {
-                load_tile(TileExtension::WEIGHT,     bytes, tid);
-                load_tile(TileExtension::ACTIVATION, bytes, tid);
+                if (cfg_.paired()) {
+                    auto* wdma = next_dma();
+                    auto* adma = next_dma();
+                    auto w = wdma->issue_read(bytes, TileExtension::WEIGHT, tid);
+                    auto a = adma->issue_read(bytes, TileExtension::ACTIVATION, tid);
+                    wdma->wait_for(w);
+                    wait(buf_->access_time(bytes));
+                    adma->wait_for(a);
+                    wait(buf_->access_time(bytes));
+                } else {
+                    load_tile(TileExtension::WEIGHT, bytes, tid);
+                    load_tile(TileExtension::ACTIVATION, bytes, tid);
+                }
                 wait(pe_->pass_time());                  // PE 算一趟
                 pe_->account_pass();
                 ++tid;

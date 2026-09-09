@@ -53,3 +53,10 @@ enable_testing()
 add_executable(sanity_tests tests/sanity_tests.cpp)
 target_link_libraries(sanity_tests PRIVATE npu_core)
 add_test(NAME sanity_tests COMMAND sanity_tests)
+
+# MVP-5: independent hand anchors and CLI integration (no plotting dependency).
+find_package(Python3 COMPONENTS Interpreter QUIET)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME mvp5_validation
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/mvp5/test_validation.py $<TARGET_FILE:npu_sim>)
+endif()

@@ -11,6 +11,8 @@
 #include <cstdint>
 #include <cerrno>
 #include <cstdlib>
+#include <cmath>
+#include <exception>
 
 static void print_usage(const char* prog) {
     std::cout <<
@@ -28,6 +30,8 @@ static void print_usage(const char* prog) {
 "\n"
 "选项:\n"
 "  -h, --help          显示本帮助并退出\n"
+"  --schedule S        serial|paired|double（默认 double）\n"
+"  --output-json PATH  保存精确统计 JSON\n"
 "  --serial            关闭 double buffering（搬和算串行，作对照）\n"
 "  --dma N             并发 DMA 引擎数（1/2/4/8...）   [默认 1]\n"
 "  --arbiter P         仲裁策略: fifo|rr|priority       [默认 fifo]\n"
@@ -87,7 +91,7 @@ static double parse_positive_double(const char* prog, const char* name, const ch
     errno = 0;
     char* end = nullptr;
     double v = std::strtod(s, &end);
-    if (end == s || *end != '\0' || errno != 0 || !(v > 0.0)) {
+    if (end == s || *end != '\0' || errno != 0 || !std::isfinite(v) || !(v > 0.0)) {
         std::cerr << "错误: 参数 " << name << " = \"" << s << "\" 必须是正数\n\n";
         print_usage(prog);
         std::exit(2);
@@ -102,6 +106,8 @@ int sc_main(int argc, char* argv[]) {
 
     // ---- 先扫一遍：分出选项(flag) 与 位置参数 ----
     bool double_buffer = true;
+    bool schedule_seen = false;
+    std::string schedule = "double", json_path;
     std::vector<const char*> pos;   // 位置参数（M K N array_n buffer_kb）
     uint32_t dma_count   = 1;
     ArbiterPolicy arb    = ArbiterPolicy::FIFO;
@@ -112,7 +118,23 @@ int sc_main(int argc, char* argv[]) {
     for (int i = 1; i < argc; ++i) {
         std::string a = argv[i];
         if      (a == "-h" || a == "--help") { print_usage(prog); return 0; }
-        else if (a == "--serial")            { double_buffer = false; }
+        else if (a == "--serial" || a == "--schedule") {
+            if (schedule_seen) { std::cerr << "错误: 调度参数重复或冲突\n"; return 2; }
+            schedule_seen = true;
+            if (a == "--serial") schedule = "serial";
+            else {
+                if (i + 1 >= argc) { std::cerr << "错误: --schedule 需要值\n"; return 2; }
+                schedule = argv[++i];
+            }
+            if (schedule != "serial" && schedule != "paired" && schedule != "double") {
+                std::cerr << "错误: 未知调度模式\n"; return 2;
+            }
+            double_buffer = schedule == "double";
+        }
+        else if (a == "--output-json") {
+            if (i + 1 >= argc || !json_path.empty()) { std::cerr << "错误: --output-json 参数无效\n"; return 2; }
+            json_path = argv[++i];
+        }
         else if (a == "--dma") {
             if (i + 1 >= argc) { std::cerr << "错误: --dma 需要一个值\n\n"; print_usage(prog); return 2; }
             dma_count = parse_positive(prog, "--dma", argv[++i]);
@@ -151,6 +173,7 @@ int sc_main(int argc, char* argv[]) {
 
     NpuConfig cfg;
     cfg.set_double_buffer(double_buffer);
+    if (schedule == "paired") cfg.set_paired();
     cfg.set_dma_count(dma_count);
     cfg.set_arbiter_policy(arb);
     cfg.set_noc_latency(noc_latency);
@@ -181,5 +204,13 @@ int sc_main(int argc, char* argv[]) {
 
     PerfMonitor::report(cfg, task, sys.interconnect(), sys.mc(), sys.hbm(),
                         sys.pe(), sys.driver());
+    if (!json_path.empty()) {
+        try {
+            PerfMonitor::write_json(json_path, cfg, task, sys.interconnect(), sys.mc(), sys.pe(), sys.driver());
+        } catch (const std::exception& e) {
+            std::cerr << "JSON output failed: " << e.what() << "\n";
+            return 1;
+        }
+    }
     return 0;
 }

@@ -24,3 +24,7 @@ build/
 .idea/
 *.swp
 .DS_Store
+
+# MVP-5 raw experiments and Python bytecode
+/results/
+__pycache__/

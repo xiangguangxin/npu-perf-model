@@ -52,7 +52,9 @@ public:
     double   hbm_bw_GBps()     const { return hbm_bw_GBps_; }       // HBM 带宽 (GB/s)
     uint32_t hbm_lat_cyc()     const { return hbm_lat_cyc_; }       // HBM 访问延迟 (cycle)
     uint32_t dma_outstanding() const { return dma_outstanding_; }   // DMA 最大未完成事务
-    bool     double_buffer()   const { return double_buffer_; }     // 是否开启预取重叠
+    bool     double_buffer()   const { return double_buffer_; }
+    bool paired() const { return paired_; }
+    const char* schedule() const { return double_buffer_ ? "double" : (paired_ ? "paired" : "serial"); }     // 是否开启预取重叠
     uint32_t data_bytes()      const { return data_bytes_; }        // 每元素字节数 (int8 = 1)
     uint32_t dma_count()       const { return dma_count_; }         // DMA 引擎数量（MVP-4 多请求源）
     ArbiterPolicy arbiter_policy() const { return arbiter_policy_; }// 互连仲裁策略
@@ -63,7 +65,8 @@ public:
     // ---- 命令行会覆盖的量才暴露 setter ----
     void set_array_n(uint32_t v)      { array_n_ = v; }
     void set_buffer_kb(uint32_t v)    { buffer_kb_ = v; }
-    void set_double_buffer(bool v)    { double_buffer_ = v; }
+    void set_double_buffer(bool v)    { double_buffer_ = v; paired_ = false; }
+    void set_paired() { double_buffer_ = false; paired_ = true; }
     void set_dma_count(uint32_t v)    { dma_count_ = v; }
     void set_arbiter_policy(ArbiterPolicy p) { arbiter_policy_ = p; }
     void set_noc_latency(uint32_t v)  { noc_latency_ = v; }
@@ -77,6 +80,7 @@ private:
     double   hbm_bw_GBps_    = 256;     // HBM (High Bandwidth Memory高带宽内存)带宽 (GB/s)， 每秒传输 256 GB数据， 系统级内存
     uint32_t hbm_lat_cyc_    = 100;     // HBM 访问延迟 (cycle)
     uint32_t dma_outstanding_ = 4;      // DMA 最大未完成 AT 事务
+    bool paired_ = false;
     bool     double_buffer_  = true;    // 是否开启预取重叠（MVP-2 才用到）
     uint32_t data_bytes_     = 1;       // 每元素字节数 (int8 = 1)
 

@@ -164,7 +164,7 @@ flowchart TB
 | MVP-2 | PE Array timing + double buffering overlap，输出吞吐/利用率 | ✅ 已完成 |
 | MVP-3 | DMA↔Memory 路径升级为 AT（4 phases + PEQ） | ✅ 已完成 |
 | MVP-4 | Interconnect/Arbiter + contention 实验 | ✅ 已完成 |
-| MVP-5 | 解析模型交叉验证 + 敏感性扫描脚本 + 博客 | ⬜ 未开始 |
+| MVP-5 | 独立解析验证 + 参数扫描 + 实验报告 | ✅ 首版完成（未做真实硬件校准） |
 
 先用 LT 把功能跑通，再把关键路径换 AT。
 
@@ -187,8 +187,15 @@ flowchart TB
 
 ## 文档
 
+- Roofline 模型核心学习笔记：[docs/notes/Roofline_Model_Core_Notes.md](docs/notes/Roofline_Model_Core_Notes.md)
 - 完整开发文档（前置背景知识、模块代码骨架、timing 公式推导、博客大纲与实验设计）：[docs/design/NPU_Perf_Model_DevDoc.md](docs/design/NPU_Perf_Model_DevDoc.md)
 - Phase-1 (MVP-1) 数据流程图（模块拓扑、tiling 循环、LT 时序、时间对账）：[docs/design/MVP1_dataflow.md](docs/design/MVP1_dataflow.md)
 - Phase-3 (MVP-3) AT 数据框架图与四相协议原理图：[docs/design/MVP3_at_dataflow.md](docs/design/MVP3_at_dataflow.md)
 - Phase-4 (MVP-4) 类图与 SystemC 连接关系：[docs/design/MVP4-Class-Diagram-SystemC-Connection.md](docs/design/MVP4-Class-Diagram-SystemC-Connection.md)
 - Phase-4 (MVP-4) 详细设计规范（互连/仲裁/MC/背压/时序模型）：[docs/design/MVP4-Detailed-Design-Specification.md](docs/design/MVP4-Detailed-Design-Specification.md)
+
+### MVP-5 实验
+
+- [复现步骤与实验输入](experiments/mvp5/README.md)
+- [验证结果与架构实验报告](docs/experiments/MVP5_Results.md)
+- [实施设计](docs/design/MVP5_Validation_and_Experiments.md)

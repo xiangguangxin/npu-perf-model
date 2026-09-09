@@ -1,0 +1,1056 @@
+[
+  {
+    "id": "v_single_serial",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "16",
+      "16",
+      "16",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_single_paired",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "16",
+      "16",
+      "16",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_single_double",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "16",
+      "16",
+      "16",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_multi_serial",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_multi_paired",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_multi_double",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_rect_serial",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "64",
+      "128",
+      "64",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_rect_paired",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "64",
+      "128",
+      "64",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_rect_double",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "64",
+      "128",
+      "64",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_tiny_serial",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "1",
+      "1",
+      "1",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_tiny_paired",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "1",
+      "1",
+      "1",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_tiny_double",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "1",
+      "1",
+      "1",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_edge_serial",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "17",
+      "17",
+      "17",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_edge_paired",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "17",
+      "17",
+      "17",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_edge_double",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "17",
+      "17",
+      "17",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_uneven_serial",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "31",
+      "33",
+      "65",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_uneven_paired",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "31",
+      "33",
+      "65",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_uneven_double",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "31",
+      "33",
+      "65",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_array_8",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "64",
+      "64",
+      "64",
+      "8",
+      "256"
+    ]
+  },
+  {
+    "id": "v_array_32",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "64",
+      "64",
+      "64",
+      "32",
+      "256"
+    ]
+  },
+  {
+    "id": "v_noc_2",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "2",
+      "16",
+      "16",
+      "16",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_noc_10",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "10",
+      "16",
+      "16",
+      "16",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "v_repeat",
+    "group": "validation",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_32_serial",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_32_paired",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_32_double",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_128_serial",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_128_paired",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_128_double",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_512_serial",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "serial",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "512",
+      "512",
+      "512",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_512_paired",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "paired",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "512",
+      "512",
+      "512",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e1_512_double",
+    "group": "E1",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "512",
+      "512",
+      "512",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e2_8",
+    "group": "E2",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "8",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e2_16",
+    "group": "E2",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "16",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e2_32",
+    "group": "E2",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "32",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e2_64",
+    "group": "E2",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "64",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e2_128",
+    "group": "E2",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "128",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e2_256",
+    "group": "E2",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_32_8_32",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "32",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "8",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_32_8_256",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "8",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_32_16_32",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "32",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_32_16_256",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_32_32_32",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "32",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "32",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_32_32_256",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "32",
+      "32",
+      "32",
+      "32",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_128_8_32",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "32",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "8",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_128_8_256",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "8",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_128_16_32",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "32",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_128_16_256",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_128_32_32",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "32",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "32",
+      "256"
+    ]
+  },
+  {
+    "id": "e3_128_32_256",
+    "group": "E3",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "32",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_16_16",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "16",
+      "--noc-latency",
+      "0",
+      "128",
+      "16",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_16_256",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "16",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_32_16",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "16",
+      "--noc-latency",
+      "0",
+      "128",
+      "32",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_32_256",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "32",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_128_16",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "16",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_128_256",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_512_16",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "16",
+      "--noc-latency",
+      "0",
+      "128",
+      "512",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e4_512_256",
+    "group": "E4",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "512",
+      "128",
+      "16",
+      "256"
+    ]
+  },
+  {
+    "id": "e5_4",
+    "group": "E5",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "4"
+    ]
+  },
+  {
+    "id": "e5_16",
+    "group": "E5",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "16"
+    ]
+  },
+  {
+    "id": "e5_64",
+    "group": "E5",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "64"
+    ]
+  },
+  {
+    "id": "e5_256",
+    "group": "E5",
+    "args": [
+      "--schedule",
+      "double",
+      "--interconnect-bw",
+      "256",
+      "--noc-latency",
+      "0",
+      "128",
+      "128",
+      "128",
+      "16",
+      "256"
+    ]
+  }
+]

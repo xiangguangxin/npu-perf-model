@@ -16,6 +16,9 @@ namespace npu_perf {
 
 class PerfMonitor {
 public:
+    static void write_json(const std::string& path, const NpuConfig& cfg, const GemmTask& t,
+                           const Interconnect& ic, const MemoryController& mc,
+                           const PeArray& pe, const WorkloadDriver& drv);
     // 理想最小搬运字节（无复用惩罚）
     static double bytes_min(const NpuConfig& c, const GemmTask& t);
 
